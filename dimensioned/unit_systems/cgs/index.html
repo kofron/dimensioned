@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `cgs` mod in crate `dimensioned`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, cgs">
+
+    <title>dimensioned::unit_systems::cgs - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <a href='../../../dimensioned/index.html'><img src='https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png' alt='logo' width='100'></a>
+        <p class='location'><a href='../../index.html'>dimensioned</a>::<wbr><a href='../index.html'>unit_systems</a></p><script>window.sidebarCurrent = {name: 'cgs', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../../index.html'>dimensioned</a>::<wbr><a href='../index.html'>unit_systems</a>::<wbr><a class='mod' href=''>cgs</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/dimensioned/home/travis/build/paholg/dimensioned/target/debug/build/dimensioned-4e2d7469da395cfc/out/cgs.rs.html#54-114' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>The Gaussian CGS unit system</p>
+
+<p>Note: this system is incomplete. More derived units and constants are coming.</p>
+
+<p>Following, we list all of the <a href="#base-units">base units</a>, <a href="#derived-units">derived units</a>, and
+<a href="#constants">constants</a> that are defined in this unit system.</p>
+
+<h1 id='base-units' class='section-header'><a href='#base-units'>Base Units</a></h1>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Unit</th>
+<th>Print Token</th>
+<th>Dimensionn</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>SQRTCM</td>
+<td>SqrtCentimeter</td>
+<td>sqrtcm</td>
+<td></td>
+</tr>
+<tr>
+<td>SQRTG</td>
+<td>SqrtGram</td>
+<td>sqrtg</td>
+<td></td>
+</tr>
+<tr>
+<td>S</td>
+<td>Second</td>
+<td>s</td>
+<td>Time</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id='derived-units' class='section-header'><a href='#derived-units'>Derived Units</a></h1>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Unit</th>
+<th>Unit Definition</th>
+<th>Dimension</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>CM</td>
+<td>Centimeter</td>
+<td>SqrtCentimeter * SqrtCentimeter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>G</td>
+<td>Gram</td>
+<td>SqrtGram * SqrtGram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>CM2</td>
+<td>Centimeter2</td>
+<td>Centimeter * Centimeter</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>CM3</td>
+<td>Centimeter3</td>
+<td>Centimeter2 * Centimeter</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>Second2</td>
+<td>Second * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>Second3</td>
+<td>Second2 * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>S4</td>
+<td>Second4</td>
+<td>Second3 * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>CMPS</td>
+<td>CentimeterPerSecond</td>
+<td>Centimeter / Second</td>
+<td>Velocity</td>
+</tr>
+<tr>
+<td>CMPS3</td>
+<td>CentimeterPerSecond3</td>
+<td>Centimeter / Second3</td>
+<td>Jerk</td>
+</tr>
+<tr>
+<td>CMPS4</td>
+<td>CentimeterPerSecond4</td>
+<td>Centimeter / Second4</td>
+<td></td>
+</tr>
+<tr>
+<td>CM2PS</td>
+<td>Centimeter2PerSecond</td>
+<td>Centimeter2 / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>CM2PS2</td>
+<td>Centimeter2PerSecond2</td>
+<td>Centimeter2 / Second2</td>
+<td></td>
+</tr>
+<tr>
+<td>CM2PS3</td>
+<td>Centimeter2PerSecond3</td>
+<td>Centimeter2 / Second3</td>
+<td></td>
+</tr>
+<tr>
+<td>CM3PS</td>
+<td>Centimeter3PerSecond</td>
+<td>Centimeter3 / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>CM3PS2</td>
+<td>Centimeter3PerSecond2</td>
+<td>Centimeter3 / Second2</td>
+<td></td>
+</tr>
+<tr>
+<td>CM3PS3</td>
+<td>Centimeter3PerSecond3</td>
+<td>Centimeter3 / Second3</td>
+<td></td>
+</tr>
+<tr>
+<td>GAL</td>
+<td>Gal</td>
+<td>Centimeter / Second2</td>
+<td>Acceleration</td>
+</tr>
+<tr>
+<td>DYN</td>
+<td>Dyne</td>
+<td>Gram * Gal</td>
+<td>Force</td>
+</tr>
+<tr>
+<td>ERG</td>
+<td>Erg</td>
+<td>Dyne * Centimeter</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>ERGPS</td>
+<td>ErgPerSecond</td>
+<td>Erg / Second</td>
+<td>Power</td>
+</tr>
+<tr>
+<td>BA</td>
+<td>Barye</td>
+<td>Dyne / Centimeter2</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>P</td>
+<td>Poise</td>
+<td>Gram / Centimeter / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>ST</td>
+<td>Stokes</td>
+<td>Centimeter2 / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>K</td>
+<td>Kayser</td>
+<td>Unitless / Centimeter</td>
+<td>ReciprocalLength</td>
+</tr>
+<tr>
+<td>STATC</td>
+<td>StatCoulomb</td>
+<td>SqrtGram * SqrtCentimeter * Centimeter / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>STATA</td>
+<td>StatAmpere</td>
+<td>StatCoulomb / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>STATV</td>
+<td>StatVolt</td>
+<td>Erg / StatCoulomb</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h1 id='constants' class='section-header'><a href='#constants'>Constants</a></h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Constant</th>
+<th>Value</th>
+<th>Unit</th>
+<th>Dimension</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Meter</td>
+<td>M</td>
+<td>HECTO * CM</td>
+<td>Centimeter</td>
+<td>Length</td>
+</tr>
+</tbody>
+</table>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use self::<a class='mod' href='../../../dimensioned/unit_systems/cgs/f64consts/index.html' title='dimensioned::unit_systems::cgs::f64consts'>f64consts</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='f32consts/index.html'
+                                  title='dimensioned::unit_systems::cgs::f32consts'>f32consts</a></td>
+                           <td class='docblock-short'>
+                                <p>Constants defined for this system</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='f64consts/index.html'
+                                  title='dimensioned::unit_systems::cgs::f64consts'>f64consts</a></td>
+                           <td class='docblock-short'>
+                                <p>Constants defined for this system</p>
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.CGS.html'
+                                  title='dimensioned::unit_systems::cgs::CGS'>CGS</a></td>
+                           <td class='docblock-short'>
+                                <p>The struct for this unit system</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Barye.html'
+                                  title='dimensioned::unit_systems::cgs::Barye'>Barye</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter'>Centimeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter2.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter2'>Centimeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter2PerSecond.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter2PerSecond'>Centimeter2PerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter2PerSecond2.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter2PerSecond2'>Centimeter2PerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter2PerSecond3.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter2PerSecond3'>Centimeter2PerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter3.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter3'>Centimeter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter3PerSecond.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter3PerSecond'>Centimeter3PerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter3PerSecond2.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter3PerSecond2'>Centimeter3PerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Centimeter3PerSecond3.html'
+                                  title='dimensioned::unit_systems::cgs::Centimeter3PerSecond3'>Centimeter3PerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CentimeterPerSecond.html'
+                                  title='dimensioned::unit_systems::cgs::CentimeterPerSecond'>CentimeterPerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CentimeterPerSecond3.html'
+                                  title='dimensioned::unit_systems::cgs::CentimeterPerSecond3'>CentimeterPerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CentimeterPerSecond4.html'
+                                  title='dimensioned::unit_systems::cgs::CentimeterPerSecond4'>CentimeterPerSecond4</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Dyne.html'
+                                  title='dimensioned::unit_systems::cgs::Dyne'>Dyne</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Erg.html'
+                                  title='dimensioned::unit_systems::cgs::Erg'>Erg</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.ErgPerSecond.html'
+                                  title='dimensioned::unit_systems::cgs::ErgPerSecond'>ErgPerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Gal.html'
+                                  title='dimensioned::unit_systems::cgs::Gal'>Gal</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Gram.html'
+                                  title='dimensioned::unit_systems::cgs::Gram'>Gram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Kayser.html'
+                                  title='dimensioned::unit_systems::cgs::Kayser'>Kayser</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Poise.html'
+                                  title='dimensioned::unit_systems::cgs::Poise'>Poise</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second.html'
+                                  title='dimensioned::unit_systems::cgs::Second'>Second</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second2.html'
+                                  title='dimensioned::unit_systems::cgs::Second2'>Second2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second3.html'
+                                  title='dimensioned::unit_systems::cgs::Second3'>Second3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second4.html'
+                                  title='dimensioned::unit_systems::cgs::Second4'>Second4</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.SqrtCentimeter.html'
+                                  title='dimensioned::unit_systems::cgs::SqrtCentimeter'>SqrtCentimeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.SqrtGram.html'
+                                  title='dimensioned::unit_systems::cgs::SqrtGram'>SqrtGram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.StatAmpere.html'
+                                  title='dimensioned::unit_systems::cgs::StatAmpere'>StatAmpere</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.StatCoulomb.html'
+                                  title='dimensioned::unit_systems::cgs::StatCoulomb'>StatCoulomb</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.StatVolt.html'
+                                  title='dimensioned::unit_systems::cgs::StatVolt'>StatVolt</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Stokes.html'
+                                  title='dimensioned::unit_systems::cgs::Stokes'>Stokes</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Unitless.html'
+                                  title='dimensioned::unit_systems::cgs::Unitless'>Unitless</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "dimensioned";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

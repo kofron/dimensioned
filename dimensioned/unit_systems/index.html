@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `unit_systems` mod in crate `dimensioned`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, unit_systems">
+
+    <title>dimensioned::unit_systems - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <a href='../../dimensioned/index.html'><img src='https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png' alt='logo' width='100'></a>
+        <p class='location'><a href='../index.html'>dimensioned</a></p><script>window.sidebarCurrent = {name: 'unit_systems', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>dimensioned</a>::<wbr><a class='mod' href=''>unit_systems</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../src/dimensioned/home/travis/build/paholg/dimensioned/target/debug/build/dimensioned-4e2d7469da395cfc/out/unit_systems.rs.html#68-74' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>Predefined unit systems</p>
+
+<p>When it makes sense, conversions are defined between unit systems. See the <code>conversion</code> module for
+more information.</p>
+
+<h2 id='structure' class='section-header'><a href='#structure'>Structure</a></h2>
+<p>Each unit system contained herein lists in tables its base units, derived units, and constants.</p>
+
+<p>Each item in the &quot;Constant&quot; column is the name of a constant created in both the <code>f32consts</code> and
+<code>f64consts</code> submodules. Everything in the <code>f64consts</code> submodule is also re-exported in the unit
+system module for ease of use.</p>
+
+<p>Each item in the &quot;Unit&quot; column is the name of a type alias for that unit in the unit system. It
+needs to be parametrized to be used.</p>
+
+<p>For example, in the SI system, there is a defined unit <code>Meter</code> with accompanying constant <code>M</code>. We
+can use them as follows.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>dimensioned</span> <span class='kw'>as</span> <span class='ident'>dim</span>;
+<span class='kw'>use</span> <span class='ident'>dim</span>::<span class='ident'>si</span>::{<span class='self'>self</span>, <span class='ident'>Meter</span>, <span class='ident'>M</span>};
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>x</span>: <span class='ident'>Meter</span><span class='op'>&lt;</span><span class='ident'>f64</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>M</span>;
+    <span class='kw'>let</span> <span class='ident'>y</span> <span class='op'>=</span> <span class='ident'>Meter</span>::<span class='ident'>new</span>(<span class='number'>3.0</span>);
+    <span class='kw'>let</span> <span class='ident'>z</span> <span class='op'>=</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>M</span>;
+
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>x</span>, <span class='ident'>y</span>);
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>x</span>, <span class='ident'>z</span>);
+
+    <span class='kw'>let</span> <span class='ident'>x32</span>: <span class='ident'>Meter</span><span class='op'>&lt;</span><span class='ident'>f32</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>si</span>::<span class='ident'>f32consts</span>::<span class='ident'>M</span>;
+    <span class='kw'>let</span> <span class='ident'>y32</span> <span class='op'>=</span> <span class='ident'>Meter</span>::<span class='ident'>new</span>(<span class='number'>3.0</span>);
+
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>x32</span>, <span class='ident'>y32</span>);
+}</pre>
+
+<h2 id='naming-conventions' class='section-header'><a href='#naming-conventions'>Naming conventions</a></h2>
+<p>When a unit has a proper name, we use that. When it does not, we use the following naming
+convention:</p>
+
+<p>For the type definition of a derived unit, the name will all of the units in the numerator listed,
+each followed by the number of its power, and then, if there are units in the denominator, the word
+<code>Per</code> and all of the units in the denominator.</p>
+
+<p>The accompanying constants follow a similar convention, but use the constant instead of unit name
+and the letter <code>P</code> instead of <code>Per</code>.</p>
+
+<p>For example, we define <code>MeterPerSecond2</code> for acceleration in the SI system, with the accompanying
+constant <code>MPS2</code>.</p>
+
+<h2 id='completeness' class='section-header'><a href='#completeness'>Completeness</a></h2>
+<p>Note that the unit systems included here should not be considered complete. New units and
+systems will be added. If there are any particular units or unit systems that you think should be
+added, please submit an issue on github.</p>
+
+<hr>
+
+<p>All of these unit systems were generated using the <code>make_units!</code> macro. See its documentation for
+more information.</p>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='cgs/index.html'
+                                  title='dimensioned::unit_systems::cgs'>cgs</a></td>
+                           <td class='docblock-short'>
+                                <p>The Gaussian CGS unit system</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='fps/index.html'
+                                  title='dimensioned::unit_systems::fps'>fps</a></td>
+                           <td class='docblock-short'>
+                                <p>The foot, pound, second system, using the mass pound as a base unit.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='mks/index.html'
+                                  title='dimensioned::unit_systems::mks'>mks</a></td>
+                           <td class='docblock-short'>
+                                <p>The Gaussian MKS unit system</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='si/index.html'
+                                  title='dimensioned::unit_systems::si'>si</a></td>
+                           <td class='docblock-short'>
+                                <p>The International System of Units (SI)</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='ucum/index.html'
+                                  title='dimensioned::unit_systems::ucum'>ucum</a></td>
+                           <td class='docblock-short'>
+                                <p>The Unified Code for Units of Measure (UCUM)</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "dimensioned";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

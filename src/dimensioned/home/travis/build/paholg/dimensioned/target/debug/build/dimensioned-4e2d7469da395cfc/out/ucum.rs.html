@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="Source to the Rust file `/home/travis/build/paholg/dimensioned/target/debug/build/dimensioned-4e2d7469da395cfc/out/ucum.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
+
+    <title>ucum.rs.html -- source</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../../../main.css">
+    
+
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <a href='../../../../../../../../../../../../dimensioned/index.html'><img src='https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png' alt='logo' width='100'></a>
+        
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
+<span id="715">715</span>
+<span id="716">716</span>
+<span id="717">717</span>
+<span id="718">718</span>
+<span id="719">719</span>
+<span id="720">720</span>
+<span id="721">721</span>
+<span id="722">722</span>
+<span id="723">723</span>
+<span id="724">724</span>
+<span id="725">725</span>
+<span id="726">726</span>
+<span id="727">727</span>
+<span id="728">728</span>
+<span id="729">729</span>
+<span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+</pre><pre class='rust '>
+<span class='doccomment'>/**
+
+
+The Unified Code for Units of Measure (UCUM)
+
+This is an attempt to define a unit system for [The Unified Code for Units of
+Measure](http://unitsofmeasure.org/ucum.html). It does not perfectly match the specification in the
+ways mentioned below.
+
+---
+
+The UCUM specification uses NIST values from 1980 for experimentally determined constants. For some
+of these, we use the 2014 values instead, which can be found
+[here](http://physics.nist.gov/cuu/Constants/).
+
+---
+
+There are a few classifications of units that UCUM defines but that it does not make sense to
+define here, and so we do not. They are as follows:
+
+* Units defined in terms of characters that we can&#39;t use. For example, the
+symbol for minutes as measure of angle is given by a single quote, &#39;.
+
+* Units that require conversions that involve more than multiplication. These include some
+temperature units (such as degrees Celcius) and logrithmic units (such as decibels).
+
+---
+
+Conflicts:
+
+While the UCUM specification aims to minimize conflicts, there are still some. Units that may
+conflict are indicated by the UCUM spec by square brackets. When there is a conflict, for the unit
+in square brackets, we name it with a trailing underscore. For example, the speed of light
+conflicts with coulomb, so we use `C_` for the speed of light.
+
+---
+
+A note on derived units:
+
+Mass is involved in a great many units. As the SI unit of mass is the kilogram, there are many
+units defined in terms of tffhe kilogram. To create a derived unit in dimensioned, it must have a
+value of 1.0. Since UCUM uses the gram and not the kilogram as a base unit, that leads to many
+common derived units being off by a factor of 1000. As a result, you will see many derived units
+with prefixes, such as `MilliNewton` and `KiloFarad`. The constants for the more common units (`N`
+and `F` for the two mentioned) are still defined, but if you need to refer to their types (such as
+in function signatures), this is something to bear in mind.
+
+---
+
+
+
+
+Following, we list all of the [base units](#base-units), [derived units](#derived-units), and
+[constants](#constants) that are defined in this unit system.
+# Base Units
+Constant | Unit | Print Token | Dimensionn
+---|---|---|---
+M | Meter | m | Length
+S | Second | s | Time
+G | Gram | g | Mass
+RAD | Radian | rad | 
+K | Kelvin | K | Temperature
+C | Coulomb | C | Charge
+CD | Candela | cd | LuminousIntensity
+# Derived Units
+Constant | Unit | Unit Definition | Dimension
+---|---|---|---
+SR | Steradian | Radian * Radian | 
+HZ | Hertz | Unitless / Second | Frequency
+MILLIN | MilliNewton | Gram * Meter / Second / Second | Force
+MILLIPA | MilliPascal | MilliNewton / Meter / Meter | Pressure
+MILLIJ | MilliJoule | MilliNewton * Meter | Energy
+MILLIW | MilliWatt | MilliJoule / Second | Power
+A | Ampere | Coulomb / Second | Current
+MILLIV | MilliVolt | MilliJoule / Coulomb | ElectricPotential
+KILOF | KiloFarad | Coulomb / MilliVolt | Capacitance
+MILLIOHM | MilliOhm | MilliVolt / Ampere | Resistance
+KILOSIE | KiloSiemens | Unitless / MilliOhm | Conductance
+MILLIWB | MilliWeber | MilliVolt * Second | MagneticFlux
+MILLIT | MilliTesla | MilliWeber / Meter / Meter | 
+MILLIH | MilliHenry | MilliWeber / Ampere | Inductance
+LM | Lumen | Candela * Steradian | 
+LX | Lux | Lumen / Meter / Meter | 
+BQ | Becquerel | Unitless / Second | 
+GY | Gray | MilliJoule / Gram | 
+SV | Sievert | MilliJoule / Gram | 
+S2 | Second2 | Second * Second | 
+S3 | Second3 | Second2 * Second | 
+M2 | Meter2 | Meter * Meter | Area
+M3 | Meter3 | Meter2 * Meter | Volume
+PM | PerMeter | Unitless / Meter | ReciprocalLength
+MPS | MeterPerSecond | Meter / Second | Velocity
+MPS2 | MeterPerSecond2 | Meter / Second2 | Acceleration
+MPS3 | MeterPerSecond3 | Meter / Second3 | Jerk
+M2PS | Meter2PerSecond | Meter2 / Second | 
+M2PS2 | Meter2PerSecond2 | Meter2 / Second2 | 
+APM | AmperePerMeter | Ampere / Meter | 
+CPM2 | CandelaPerMeter2 | Candela / Meter2 | 
+CPG | CoulombPerGram | Coulomb / Gram | 
+GPM | GramPerMeter | Gram / Meter | 
+GPM4S | GramPerMeter4Second | Gram / Meter3 / Meter / Second | 
+MILLIJS | MilliJouleSecond | MilliJoule * Second | 
+MILLIJPK | MilliJoulePerKelvin | MilliJoule / Kelvin | 
+KILOFPM | KiloFaradPerMeter | KiloFarad / Meter | 
+MILLINPA2 | MilliNewtonPerAmpere2 | MilliNewton / Ampere / Ampere | 
+M3PGS2 | Meter3PerGramSecond2 | Meter3 / Gram / Second2 | 
+MILLIPS | MilliPascalSecond | MilliPascal * Second | 
+M3PSG | Meter3PerSecondGram | Meter3 / Second / Gram | 
+# Constants
+Name | Constant | Value | Unit | Dimension 
+---|---|---|---|---
+Centimeter | CM | CENTI * M | Meter | Length
+Astronomic unit | ASU | 149597.870691e6 * M | Meter | Length
+Parsec | PRS | 3.085678e16 * M | Meter | Length
+Light-year | LY | C_ * ANN_J | Meter | Length
+International inch | IN_I | 2.54 * CM | Meter | Length
+International foot | FT_I | 12.0 * IN_I | Meter | Length
+International yard | YD_I | 3.0 * FT_I | Meter | Length
+International mile | MI_I | 5280.0 * FT_I | Meter | Length
+International fathom | FTH_I | 6.0 * FT_I | Meter | Length
+International nautical mile | NMI_I | 1852.0 * M | Meter | Length
+International mil | MIL_I | 1.0e-3 * IN_I | Meter | Length
+International hand | HD_I | 4.0 * IN_I | Meter | Length
+US foot | FT_US | 1200.0 / 3937.0 * M | Meter | Length
+US yard | YD_US | 3.0 * FT_US | Meter | Length
+US inch | IN_US | FT_US / 12.0 | Meter | Length
+US rod | RD_US | 16.5 * FT_US | Meter | Length
+US Gunter&#39;s chain | CH_US | 4.0 * RD_US | Meter | Length
+US Gunter&#39;s chain | LK_US | CH_US / 100.0 | Meter | Length
+US Ramden&#39;s chain | RCH_US | 100.0 * FT_US | Meter | Length
+US Link for Ramden&#39;s chain | RLK_US | RCH_US / 100.0 | Meter | Length
+US fathom | FTH_US | 6.0 * FT_US | Meter | Length
+US furlong | FUR_US | 40.0 * RD_US | Meter | Length
+US mile | MI_US | 8.0 * FUR_US | Meter | Length
+US mil | MIL_US | 1.0e-3 * IN_US | Meter | Length
+British inch | IN_BR | 2.539998 * CM | Meter | Length
+British foot | FT_BR | 12.0 * IN_BR | Meter | Length
+British rod | RD_BR | 16.5 * FT_BR | Meter | Length
+British Gunter&#39;s chain | CH_BR | 4.0 * RD_BR | Meter | Length
+British link for Gunter&#39;s chain | LK_BR | CH_BR / 100.0 | Meter | Length
+British fathom | FTH_BR | 6.0 * FT_BR | Meter | Length
+British pace | PC_BR | 2.5 * FT_BR | Meter | Length
+British yard | YD_BR | 3.0 * FT_BR | Meter | Length
+British mile | MI_BR | 5280.0 * FT_BR | Meter | Length
+British nautical mile | NMI_BR | 6080.0 * FT_BR | Meter | Length
+Line | LNE | IN_I / 12.0 | Meter | Length
+Point | PNT | LNE / 6.0 | Meter | Length
+Pica | PCA | 12.0 * PNT | Meter | Length
+Printer&#39;s point | PNT_PR | 0.013837 * IN_I | Meter | Length
+Printer&#39;s pica | PCA_PR | 12.0 * PNT_PR | Meter | Length
+Pied | PIED | 32.48 * CM | Meter | Length
+Pounce | POUNCE | PIED / 12.0 | Meter | Length
+Ligne | LIGNE | POUNCE / 12.0 | Meter | Length
+Didot | DIDOT | LIGNE / 6.0 | Meter | Length
+Cicero | CICERO | 12.0 * DIDOT | Meter | Length
+Charrière | CH | 1.0 / 3.0 * MILLI * M | Meter | Length
+Ångström | AO | 0.1 * NANO * M | Meter | Length
+Smoot | SMOOT | 67.0 * IN_I | Meter | Length
+|
+Minute | MIN | 60.0 * S | Second | Time
+Hour | HR | 60.0 * MIN | Second | Time
+Day | D | 24.0 * HR | Second | Time
+Tropical year | ANN_T | 365.24219 * D | Second | Time
+Mean Julian year | ANN_J | 365.25 * D | Second | Time
+Mean Gregorian year | ANN_G | 365.2425 * D | Second | Time
+year | ANN | ANN_J | Second | Time
+week | WK | 7.0 * D | Second | Time
+Synodal month | MO_S | 29.53059 * D | Second | Time
+Mean Julian month | MO_J | ANN_J / 12.0 | Second | Time
+Mean Gregorian month | MO_G | ANN_G / 12.0 | Second | Time
+Month | MO | MO_J | Second | Time
+Svedberg unit | S_ | 1.0e-13 * S | Second | Time
+|
+Kilogram | KG | KILO * G | Gram | Mass
+Tonne | TNE | 1.0e3 * KG | Gram | Mass
+Unified atomic mass unit | AMU | 1.6605402e-24 * G | Gram | Mass
+Electron mass | M_E | 9.10938356e-31 * KG | Gram | Mass
+Proton mass | M_P | 1.6726231e-24 * G | Gram | Mass
+Grain | GR | 64.79891 * MILLI * G | Gram | Mass
+Avoirdupois pound | LB_AV | 7000.0 * GR | Gram | Mass
+Avoirdupois ounce | OZ_AV | LB_AV / 16.0 | Gram | Mass
+Avoirdupois dram | DR_AV | OZ_AV / 16.0 | Gram | Mass
+Avoirdupois short hundredweight | SCWT_AV | 100.0 * LB_AV | Gram | Mass
+Avoirdupois long hundredweight | LCWT_AV | 112.0 * LB_AV | Gram | Mass
+Avoirdupois short ton | STON_AV | 20.0 * SCWT_AV | Gram | Mass
+Avoirdupois long ton | LTON_AV | 20.0 * LCWT_AV | Gram | Mass
+Avoirdupois stone | STONE_AV | 14.0 * LB_AV | Gram | Mass
+Troy pennyweight | PWT_TR | 24.0 * GR | Gram | Mass
+Troy ounce | OZ_TR | 20.0 * PWT_TR | Gram | Mass
+Troy pound | LB_TR | 12.0 * OZ_TR | Gram | Mass
+Apothecary scruple | SC_AP | 20.0 * GR | Gram | Mass
+Apothecary dram | DR_AP | 3.0 * SC_AP | Gram | Mass
+Apothecary ounce | OZ_AP | 8.0 * DR_AP | Gram | Mass
+Apothecary pound | LB_AP | 12.0 * OZ_AP | Gram | Mass
+Apothecary ounce | OZ_M | 28.0 * G | Gram | Mass
+Metric carat | CAR_M | 0.2 * G | Gram | Mass
+|
+Gon, grade | GON | 0.9 * DEG | Radian | 
+Degree | DEG | 2.0 * consts::PI / 360.0 * RAD | Radian | 
+Circle | CIRC | 2.0 * consts::PI * RAD | Radian | 
+|
+Degree Rankine | DEGR | 5.0 / 9.0 * K | Kelvin | Temperature
+|
+Elementary charge | E | 1.6021766208e-19 * C | Coulomb | Charge
+|
+Sphere | SPH | 4.0 * consts::PI * SR | Steradian | 
+|
+Katal | KAT | MOL / S | Hertz | Frequency
+Unit | U | MICRO * MOL / MIN | Hertz | Frequency
+|
+Newton | N | KILO * MILLIN | MilliNewton | Force
+Gram force | GF | G * G_ | MilliNewton | Force
+Pound force | LBF_AV | LB_AV * G_ | MilliNewton | Force
+Dyne | DYN | G * CM / S2 | MilliNewton | Force
+|
+Pascal | PA | KILO * MILLIPA | MilliPascal | Pressure
+Bar | BAR | 1.0e5 * PA | MilliPascal | Pressure
+Standard atmosphere | ATM | 101325.0 * PA | MilliPascal | Pressure
+Meter of water column | MH20 | 9.80665 * KILO * PA | MilliPascal | Pressure
+Meter of mercury column | MHG | 133.3220 * KILO * PA | MilliPascal | Pressure
+Technical atmosphere | ATT | KILO * GF / CM / CM | MilliPascal | Pressure
+Pound per square inch | PSI | LBF_AV / IN_I / IN_I | MilliPascal | Pressure
+|
+Joule | J | KILO * MILLIJ | MilliJoule | Energy
+Electronvolt | EV | E * V | MilliJoule | Energy
+Erg | ERG | DYN * CM | MilliJoule | Energy
+Calorie at 15 °C | CAL_15 | 4.18580 * J | MilliJoule | Energy
+Calorie at 20 °C | CAL_20 | 4.18190 * J | MilliJoule | Energy
+Mean calorie | CAL_M | 4.19002 * J | MilliJoule | Energy
+International table calorie | CAL_IT | 4.1868 * J | MilliJoule | Energy
+Thermochemical calorie | CAL_TH | 4.184 * J | MilliJoule | Energy
+Calorie | CAL | CAL_TH | MilliJoule | Energy
+Nutrition label calorie | CAL_ | KILO * CAL | MilliJoule | Energy
+British thermal unit at 39 °F | BTU_39 | 1.05967 * KILO * J | MilliJoule | Energy
+British thermal unit at 59 °F | BTU_59 | 1.05480 * KILO * J | MilliJoule | Energy
+British thermal unit at 60 °F | BTU_60 | 1.05468 * KILO * J | MilliJoule | Energy
+Mean British thermal unit | BTU_M | 1.05587 * KILO * J | MilliJoule | Energy
+International table British thermal unit | BTU_IT | 1.05505585262 * KILO * J | MilliJoule | Energy
+Thermochemical British thermal unit | BTU_TH | 1.054350 * KILO * J | MilliJoule | Energy
+British thermal unit | BTU | BTU_TH | MilliJoule | Energy
+|
+Watt | W | KILO * MILLIW | MilliWatt | Power
+Horsepower | HP | 550.0 * FT_I * LBF_AV / S | MilliWatt | Power
+|
+Biot | BI | 10.0 * A | Ampere | Current
+Gilbert | GB | OE * CM | Ampere | Current
+|
+Volt | V | KILO * MILLIV | MilliVolt | ElectricPotential
+|
+Farad | F | MILLI * KILOF | KiloFarad | Capacitance
+|
+Ohm | OHM | KILO * MILLIOHM | MilliOhm | Resistance
+|
+Siemens | SIE | MILLI * KILOSIE | KiloSiemens | Conductance
+Mho | MHO | MILLI * SIE | KiloSiemens | Conductance
+|
+Weber | WB | KILO * MILLIWB | MilliWeber | MagneticFlux
+Maxwell | MX | 1.0e-8 * WB | MilliWeber | MagneticFlux
+|
+Tesla | T | KILO * MILLIT | MilliTesla | 
+Gauss | GS | 1.0e-4 * T | MilliTesla | 
+|
+Henry | H | KILO * MILLIH | MilliHenry | Inductance
+|
+Phot | PHT | 1.0e-4 * LX | Lux | 
+|
+Curie | CI | 3.7e10 * BQ | Becquerel | 
+|
+Are | AR | 100.0 * M2 | Meter2 | Area
+International square inch | SIN_I | IN_I * IN_I | Meter2 | Area
+International square foot | SFT_I | FT_I * FT_I | Meter2 | Area
+International square yard | SYD_I | YD_I * YD_I | Meter2 | Area
+International circular mil | CML_I | consts::PI / 4.0 * MIL_I * MIL_I | Meter2 | Area
+US acre | ACR_US | 160.0 * RD_US * RD_US | Meter2 | Area
+US square rod | SRD_US | RD_US * RD_US | Meter2 | Area
+US square mile | SMI_US | MI_US * MI_US | Meter2 | Area
+Section | SCT | MI_US * MI_US | Meter2 | Area
+Township | TWP | 36.0 * SCT | Meter2 | Area
+British acre | ACR_BR | 4840.0 * YD_BR * YD_BR | Meter2 | Area
+Barn | BRN | 100.0 * FEMTO * M * FEMTO * M | Meter2 | Area
+|
+Liter | L | 0.1 * 0.1 * 0.1 * M3 | Meter3 | Volume
+International cubic inch | CIN_I | IN_I * IN_I * IN_I | Meter3 | Volume
+International cubic foot | CFT_I | FT_I * FT_I * FT_I | Meter3 | Volume
+International cubic yard | CYD_I | YD_I * YD_I * YD_I | Meter3 | Volume
+International board foot | BF_I | 144.0 * CIN_I | Meter3 | Volume
+International cord | CR_I | 128.0 * CFT_I | Meter3 | Volume
+Queen Anne&#39;s wine gallon | GAL_US | 231.0 * IN_I * IN_I * IN_I | Meter3 | Volume
+US barrel | BBL_US | 42.0 * GAL_US | Meter3 | Volume
+US quart | QT_US | GAL_US / 4.0 | Meter3 | Volume
+US pint | PT_US | QT_US / 2.0 | Meter3 | Volume
+US gill | GIL_US | PT_US / 4.0 | Meter3 | Volume
+US fluid Ounce | FOZ_US | GIL_US / 4.0 | Meter3 | Volume
+US fluid Dram | FDR_US | FOZ_US / 8.0 | Meter3 | Volume
+US minim | MIN_US | FDR_US / 60.0 | Meter3 | Volume
+US cord | CRD_US | CR_I | Meter3 | Volume
+US bushel | BU_US | 2150.42 * IN_I * IN_I * IN_I | Meter3 | Volume
+Historical winchester gallon | GAL_WI | BU_US / 8.0 | Meter3 | Volume
+US peck | PK_US | BU_US / 4.0 | Meter3 | Volume
+US dry quart | DQT_US | PK_US / 8.0 | Meter3 | Volume
+US dry pint | DPT_US | DQT_US / 2.0 | Meter3 | Volume
+US tablespoon | TBS_US | FOZ_US / 2.0 | Meter3 | Volume
+US teaspoon | TSP_US | TBS_US / 3.0 | Meter3 | Volume
+US cup | CUP_US | 16.0 * TBS_US | Meter3 | Volume
+Metric fluid ounce | FOZ_M | 30.0 * MILLI * L | Meter3 | Volume
+Metric cup | CUP_M | 240.0 * MILLI * L | Meter3 | Volume
+Metric teaspoon | TSP_M | 5.0 * MILLI * L | Meter3 | Volume
+Metric tablespoon | TBS_M | 15.0 * MILLI * L | Meter3 | Volume
+British gallon | GAL_BR | 4.54609 * L | Meter3 | Volume
+British peck | PK_BR | 2.0 * GAL_BR | Meter3 | Volume
+British bushel | BU_BR | 4.0 * PK_BR | Meter3 | Volume
+British quart | QT_BR | GAL_BR / 4.0 | Meter3 | Volume
+British pint | PT_BR | QT_BR / 2.0 | Meter3 | Volume
+British gill | GIL_BR | PT_BR / 4.0 | Meter3 | Volume
+British fluid ounce | FOZ_BR | GIL_BR / 5.0 | Meter3 | Volume
+British fluid dram | FDR_BR | FOZ_BR / 8.0 | Meter3 | Volume
+British minim | MIN_BR | FDR_BR / 60.0 | Meter3 | Volume
+Drop | DRP | MILLI * L / 20.0 | Meter3 | Volume
+Stere | STR | 1.0 * M3 | Meter3 | Volume
+|
+Kayser | KY | 1.0 / CM | PerMeter | ReciprocalLength
+Diopter | DIOP | 1.0 / M | PerMeter | ReciprocalLength
+Mesh | MESH_I | 1.0 / IN_I | PerMeter | ReciprocalLength
+|
+Speed of light in a vacuum | C_ | 299792458.0 * MPS | MeterPerSecond | Velocity
+International knot | KN_I | NMI_I / HR | MeterPerSecond | Velocity
+British knot | KN_BR | NMI_BR / HR | MeterPerSecond | Velocity
+|
+Standard acceleration of free fall | G_ | 9.80665 * M / S2 | MeterPerSecond2 | Acceleration
+Gal | GL | CM / S2 | MeterPerSecond2 | Acceleration
+|
+Stokes | ST | CM * CM / S | Meter2PerSecond | 
+|
+Radiation absorbed dose | RAD_ | 100.0 * ERG / G | Meter2PerSecond2 | 
+Radiation equivalent man | REM_ | RAD_ | Meter2PerSecond2 | 
+|
+Oersted | OE | 250.0 / consts::PI * A / M | AmperePerMeter | 
+|
+Stilb | SB | CD / CM / CM | CandelaPerMeter2 | 
+Lambert | LMB | SB / consts::PI | CandelaPerMeter2 | 
+|
+Roentgen | ROE | 2.58e-4 * C / KG | CoulombPerGram | 
+|
+Tex | TEX | 1.0 * G / (KILO * M) | GramPerMeter | 
+Denier | DEN | TEX / 9.0 | GramPerMeter | 
+|
+Peripheral vascular resistance unit | PRU | MHG * S / L | GramPerMeter4Second | 
+|
+Planck constant | H_ | 6.6260755e-34 * J * S | MilliJouleSecond | 
+|
+Boltzmann constant | K_ | 1.380658e-23 * J / K | MilliJoulePerKelvin | 
+|
+Permittivity of vacuum | EPS_0 | 8.854187817e-12 * F / M | KiloFaradPerMeter | 
+|
+Permeability of vacuum | MU_0 | 4.0e-7 * consts::PI * N / A / A | MilliNewtonPerAmpere2 | 
+|
+Newtonian constant of gravitation | GC | 6.67259e-11 * M3 / KG / S2 | Meter3PerGramSecond2 | 
+|
+Poise | P | DYN * S / CM / CM | MilliPascalSecond | 
+|
+Metabolic equivalent | MET | 3.5 * MILLI * L / MIN / KG | Meter3PerSecondGram | 
+|
+*/</span>
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>ucum</span> {
+    <span class='macro'>make_units</span><span class='macro'>!</span> {
+        <span class='ident'>UCUM</span>;
+        <span class='ident'>ONE</span>: <span class='ident'>Unitless</span>;
+
+        <span class='ident'>base</span> {
+            <span class='ident'>M</span>: <span class='ident'>Meter</span>, <span class='string'>&quot;m&quot;</span>, <span class='ident'>Length</span>;
+            <span class='ident'>S</span>: <span class='ident'>Second</span>, <span class='string'>&quot;s&quot;</span>, <span class='ident'>Time</span>;
+            <span class='ident'>G</span>: <span class='ident'>Gram</span>, <span class='string'>&quot;g&quot;</span>, <span class='ident'>Mass</span>;
+            <span class='ident'>RAD</span>: <span class='ident'>Radian</span>, <span class='string'>&quot;rad&quot;</span>;
+            <span class='ident'>K</span>: <span class='ident'>Kelvin</span>, <span class='string'>&quot;K&quot;</span>, <span class='ident'>Temperature</span>;
+            <span class='ident'>C</span>: <span class='ident'>Coulomb</span>, <span class='string'>&quot;C&quot;</span>, <span class='ident'>Charge</span>;
+            <span class='ident'>CD</span>: <span class='ident'>Candela</span>, <span class='string'>&quot;cd&quot;</span>, <span class='ident'>LuminousIntensity</span>;
+        }
+
+        <span class='ident'>derived</span> {
+            <span class='ident'>SR</span>: <span class='ident'>Steradian</span> <span class='op'>=</span> (<span class='ident'>Radian</span> <span class='op'>*</span> <span class='ident'>Radian</span>);
+            <span class='ident'>HZ</span>: <span class='ident'>Hertz</span> <span class='op'>=</span> (<span class='ident'>Unitless</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Frequency</span>;
+            <span class='ident'>MILLIN</span>: <span class='ident'>MilliNewton</span> <span class='op'>=</span> (<span class='ident'>Gram</span> <span class='op'>*</span> <span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Second</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Force</span>;
+            <span class='ident'>MILLIPA</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> (<span class='ident'>MilliNewton</span> <span class='op'>/</span> <span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Meter</span>), <span class='ident'>Pressure</span>;
+            <span class='ident'>MILLIJ</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> (<span class='ident'>MilliNewton</span> <span class='op'>*</span> <span class='ident'>Meter</span>), <span class='ident'>Energy</span>;
+            <span class='ident'>MILLIW</span>: <span class='ident'>MilliWatt</span> <span class='op'>=</span> (<span class='ident'>MilliJoule</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Power</span>;
+            <span class='ident'>A</span>: <span class='ident'>Ampere</span> <span class='op'>=</span> (<span class='ident'>Coulomb</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Current</span>;
+            <span class='ident'>MILLIV</span>: <span class='ident'>MilliVolt</span> <span class='op'>=</span> (<span class='ident'>MilliJoule</span> <span class='op'>/</span> <span class='ident'>Coulomb</span>), <span class='ident'>ElectricPotential</span>;
+            <span class='ident'>KILOF</span>: <span class='ident'>KiloFarad</span> <span class='op'>=</span> (<span class='ident'>Coulomb</span> <span class='op'>/</span> <span class='ident'>MilliVolt</span>), <span class='ident'>Capacitance</span>;
+            <span class='ident'>MILLIOHM</span>: <span class='ident'>MilliOhm</span> <span class='op'>=</span> (<span class='ident'>MilliVolt</span> <span class='op'>/</span> <span class='ident'>Ampere</span>), <span class='ident'>Resistance</span>;
+            <span class='ident'>KILOSIE</span>: <span class='ident'>KiloSiemens</span> <span class='op'>=</span> (<span class='ident'>Unitless</span> <span class='op'>/</span> <span class='ident'>MilliOhm</span>), <span class='ident'>Conductance</span>;
+            <span class='ident'>MILLIWB</span>: <span class='ident'>MilliWeber</span> <span class='op'>=</span> (<span class='ident'>MilliVolt</span> <span class='op'>*</span> <span class='ident'>Second</span>), <span class='ident'>MagneticFlux</span>;
+            <span class='ident'>MILLIT</span>: <span class='ident'>MilliTesla</span> <span class='op'>=</span> (<span class='ident'>MilliWeber</span> <span class='op'>/</span> <span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Meter</span>);
+            <span class='ident'>MILLIH</span>: <span class='ident'>MilliHenry</span> <span class='op'>=</span> (<span class='ident'>MilliWeber</span> <span class='op'>/</span> <span class='ident'>Ampere</span>), <span class='ident'>Inductance</span>;
+            <span class='ident'>LM</span>: <span class='ident'>Lumen</span> <span class='op'>=</span> (<span class='ident'>Candela</span> <span class='op'>*</span> <span class='ident'>Steradian</span>);
+            <span class='ident'>LX</span>: <span class='ident'>Lux</span> <span class='op'>=</span> (<span class='ident'>Lumen</span> <span class='op'>/</span> <span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Meter</span>);
+            <span class='ident'>BQ</span>: <span class='ident'>Becquerel</span> <span class='op'>=</span> (<span class='ident'>Unitless</span> <span class='op'>/</span> <span class='ident'>Second</span>);
+            <span class='ident'>GY</span>: <span class='ident'>Gray</span> <span class='op'>=</span> (<span class='ident'>MilliJoule</span> <span class='op'>/</span> <span class='ident'>Gram</span>);
+            <span class='ident'>SV</span>: <span class='ident'>Sievert</span> <span class='op'>=</span> (<span class='ident'>MilliJoule</span> <span class='op'>/</span> <span class='ident'>Gram</span>);
+            <span class='ident'>S2</span>: <span class='ident'>Second2</span> <span class='op'>=</span> (<span class='ident'>Second</span> <span class='op'>*</span> <span class='ident'>Second</span>);
+            <span class='ident'>S3</span>: <span class='ident'>Second3</span> <span class='op'>=</span> (<span class='ident'>Second2</span> <span class='op'>*</span> <span class='ident'>Second</span>);
+            <span class='ident'>M2</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>*</span> <span class='ident'>Meter</span>), <span class='ident'>Area</span>;
+            <span class='ident'>M3</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> (<span class='ident'>Meter2</span> <span class='op'>*</span> <span class='ident'>Meter</span>), <span class='ident'>Volume</span>;
+            <span class='ident'>PM</span>: <span class='ident'>PerMeter</span> <span class='op'>=</span> (<span class='ident'>Unitless</span> <span class='op'>/</span> <span class='ident'>Meter</span>), <span class='ident'>ReciprocalLength</span>;
+            <span class='ident'>MPS</span>: <span class='ident'>MeterPerSecond</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Velocity</span>;
+            <span class='ident'>MPS2</span>: <span class='ident'>MeterPerSecond2</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Second2</span>), <span class='ident'>Acceleration</span>;
+            <span class='ident'>MPS3</span>: <span class='ident'>MeterPerSecond3</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Second3</span>), <span class='ident'>Jerk</span>;
+            <span class='ident'>M2PS</span>: <span class='ident'>Meter2PerSecond</span> <span class='op'>=</span> (<span class='ident'>Meter2</span> <span class='op'>/</span> <span class='ident'>Second</span>);
+            <span class='ident'>M2PS2</span>: <span class='ident'>Meter2PerSecond2</span> <span class='op'>=</span> (<span class='ident'>Meter2</span> <span class='op'>/</span> <span class='ident'>Second2</span>);
+            <span class='ident'>APM</span>: <span class='ident'>AmperePerMeter</span> <span class='op'>=</span> (<span class='ident'>Ampere</span> <span class='op'>/</span> <span class='ident'>Meter</span>);
+            <span class='ident'>CPM2</span>: <span class='ident'>CandelaPerMeter2</span> <span class='op'>=</span> (<span class='ident'>Candela</span> <span class='op'>/</span> <span class='ident'>Meter2</span>);
+            <span class='ident'>CPG</span>: <span class='ident'>CoulombPerGram</span> <span class='op'>=</span> (<span class='ident'>Coulomb</span> <span class='op'>/</span> <span class='ident'>Gram</span>);
+            <span class='ident'>GPM</span>: <span class='ident'>GramPerMeter</span> <span class='op'>=</span> (<span class='ident'>Gram</span> <span class='op'>/</span> <span class='ident'>Meter</span>);
+            <span class='ident'>GPM4S</span>: <span class='ident'>GramPerMeter4Second</span> <span class='op'>=</span> (<span class='ident'>Gram</span> <span class='op'>/</span> <span class='ident'>Meter3</span> <span class='op'>/</span> <span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Second</span>);
+            <span class='ident'>MILLIJS</span>: <span class='ident'>MilliJouleSecond</span> <span class='op'>=</span> (<span class='ident'>MilliJoule</span> <span class='op'>*</span> <span class='ident'>Second</span>);
+            <span class='ident'>MILLIJPK</span>: <span class='ident'>MilliJoulePerKelvin</span> <span class='op'>=</span> (<span class='ident'>MilliJoule</span> <span class='op'>/</span> <span class='ident'>Kelvin</span>);
+            <span class='ident'>KILOFPM</span>: <span class='ident'>KiloFaradPerMeter</span> <span class='op'>=</span> (<span class='ident'>KiloFarad</span> <span class='op'>/</span> <span class='ident'>Meter</span>);
+            <span class='ident'>MILLINPA2</span>: <span class='ident'>MilliNewtonPerAmpere2</span> <span class='op'>=</span> (<span class='ident'>MilliNewton</span> <span class='op'>/</span> <span class='ident'>Ampere</span> <span class='op'>/</span> <span class='ident'>Ampere</span>);
+            <span class='ident'>M3PGS2</span>: <span class='ident'>Meter3PerGramSecond2</span> <span class='op'>=</span> (<span class='ident'>Meter3</span> <span class='op'>/</span> <span class='ident'>Gram</span> <span class='op'>/</span> <span class='ident'>Second2</span>);
+            <span class='ident'>MILLIPS</span>: <span class='ident'>MilliPascalSecond</span> <span class='op'>=</span> (<span class='ident'>MilliPascal</span> <span class='op'>*</span> <span class='ident'>Second</span>);
+            <span class='ident'>M3PSG</span>: <span class='ident'>Meter3PerSecondGram</span> <span class='op'>=</span> (<span class='ident'>Meter3</span> <span class='op'>/</span> <span class='ident'>Second</span> <span class='op'>/</span> <span class='ident'>Gram</span>);
+        }
+
+        <span class='ident'>constants</span> {
+            <span class='ident'>KG</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CM</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>CENTI</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MOL</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='number'>6.0221367e23</span> <span class='op'>*</span> <span class='ident'>ONE</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>N</span>: <span class='ident'>MilliNewton</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIN</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PA</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIPA</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>J</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIJ</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>W</span>: <span class='ident'>MilliWatt</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIW</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>V</span>: <span class='ident'>MilliVolt</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIV</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>F</span>: <span class='ident'>KiloFarad</span> <span class='op'>=</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>KILOF</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>OHM</span>: <span class='ident'>MilliOhm</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIOHM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SIE</span>: <span class='ident'>KiloSiemens</span> <span class='op'>=</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>KILOSIE</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>WB</span>: <span class='ident'>MilliWeber</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIWB</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>T</span>: <span class='ident'>MilliTesla</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIT</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>H</span>: <span class='ident'>MilliHenry</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIH</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GON</span>: <span class='ident'>Radian</span> <span class='op'>=</span> <span class='number'>0.9</span> <span class='op'>*</span> <span class='ident'>DEG</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>DEG</span>: <span class='ident'>Radian</span> <span class='op'>=</span> <span class='number'>2.0</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>/</span> <span class='number'>360.0</span> <span class='op'>*</span> <span class='ident'>RAD</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>L</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>0.1</span> <span class='op'>*</span> <span class='number'>0.1</span> <span class='op'>*</span> <span class='number'>0.1</span> <span class='op'>*</span> <span class='ident'>M3</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>AR</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>M2</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MIN</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>60.0</span> <span class='op'>*</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>HR</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>60.0</span> <span class='op'>*</span> <span class='ident'>MIN</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>D</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>24.0</span> <span class='op'>*</span> <span class='ident'>HR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ANN_T</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>365.24219</span> <span class='op'>*</span> <span class='ident'>D</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ANN_J</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>365.25</span> <span class='op'>*</span> <span class='ident'>D</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ANN_G</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>365.2425</span> <span class='op'>*</span> <span class='ident'>D</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ANN</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='ident'>ANN_J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>WK</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>7.0</span> <span class='op'>*</span> <span class='ident'>D</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MO_S</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>29.53059</span> <span class='op'>*</span> <span class='ident'>D</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MO_J</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='ident'>ANN_J</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>12.0</span>;
+            <span class='ident'>MO_G</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='ident'>ANN_G</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>12.0</span>;
+            <span class='ident'>MO</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='ident'>MO_J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>TNE</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>1.0e3</span> <span class='op'>*</span> <span class='ident'>KG</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BAR</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> <span class='number'>1.0e5</span> <span class='op'>*</span> <span class='ident'>PA</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>AMU</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>1.6605402e-24</span> <span class='op'>*</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>EV</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='ident'>E</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>V</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ASU</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>149597.870691e6</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PRS</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>3.085678e16</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>C_</span>: <span class='ident'>MeterPerSecond</span> <span class='op'>=</span> <span class='number'>299792458.0</span> <span class='op'>*</span> <span class='ident'>MPS</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>H_</span>: <span class='ident'>MilliJouleSecond</span> <span class='op'>=</span> <span class='number'>6.6260755e-34</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>K_</span>: <span class='ident'>MilliJoulePerKelvin</span> <span class='op'>=</span> <span class='number'>1.380658e-23</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>K</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>EPS_0</span>: <span class='ident'>KiloFaradPerMeter</span> <span class='op'>=</span> <span class='number'>8.854187817e-12</span> <span class='op'>*</span> <span class='ident'>F</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MU_0</span>: <span class='ident'>MilliNewtonPerAmpere2</span> <span class='op'>=</span> <span class='number'>4.0e-7</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>N</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>A</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>A</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>E</span>: <span class='ident'>Coulomb</span> <span class='op'>=</span> <span class='number'>1.6021766208e-19</span> <span class='op'>*</span> <span class='ident'>C</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>M_E</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>9.10938356e-31</span> <span class='op'>*</span> <span class='ident'>KG</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>M_P</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>1.6726231e-24</span> <span class='op'>*</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GC</span>: <span class='ident'>Meter3PerGramSecond2</span> <span class='op'>=</span> <span class='number'>6.67259e-11</span> <span class='op'>*</span> <span class='ident'>M3</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>KG</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>S2</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>G_</span>: <span class='ident'>MeterPerSecond2</span> <span class='op'>=</span> <span class='number'>9.80665</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>S2</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ATM</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> <span class='number'>101325.0</span> <span class='op'>*</span> <span class='ident'>PA</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LY</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>C_</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>ANN_J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GF</span>: <span class='ident'>MilliNewton</span> <span class='op'>=</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>G_</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LBF_AV</span>: <span class='ident'>MilliNewton</span> <span class='op'>=</span> <span class='ident'>LB_AV</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>G_</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>KY</span>: <span class='ident'>PerMeter</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>/</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GL</span>: <span class='ident'>MeterPerSecond2</span> <span class='op'>=</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>S2</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>DYN</span>: <span class='ident'>MilliNewton</span> <span class='op'>=</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>S2</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ERG</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='ident'>DYN</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>P</span>: <span class='ident'>MilliPascalSecond</span> <span class='op'>=</span> <span class='ident'>DYN</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BI</span>: <span class='ident'>Ampere</span> <span class='op'>=</span> <span class='number'>10.0</span> <span class='op'>*</span> <span class='ident'>A</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ST</span>: <span class='ident'>Meter2PerSecond</span> <span class='op'>=</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MX</span>: <span class='ident'>MilliWeber</span> <span class='op'>=</span> <span class='number'>1.0e-8</span> <span class='op'>*</span> <span class='ident'>WB</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GS</span>: <span class='ident'>MilliTesla</span> <span class='op'>=</span> <span class='number'>1.0e-4</span> <span class='op'>*</span> <span class='ident'>T</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>OE</span>: <span class='ident'>AmperePerMeter</span> <span class='op'>=</span> <span class='number'>250.0</span> <span class='op'>/</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>A</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GB</span>: <span class='ident'>Ampere</span> <span class='op'>=</span> <span class='ident'>OE</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SB</span>: <span class='ident'>CandelaPerMeter2</span> <span class='op'>=</span> <span class='ident'>CD</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LMB</span>: <span class='ident'>CandelaPerMeter2</span> <span class='op'>=</span> <span class='ident'>SB</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>consts</span>::<span class='ident'>PI</span>;
+            <span class='ident'>PHT</span>: <span class='ident'>Lux</span> <span class='op'>=</span> <span class='number'>1.0e-4</span> <span class='op'>*</span> <span class='ident'>LX</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CI</span>: <span class='ident'>Becquerel</span> <span class='op'>=</span> <span class='number'>3.7e10</span> <span class='op'>*</span> <span class='ident'>BQ</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ROE</span>: <span class='ident'>CoulombPerGram</span> <span class='op'>=</span> <span class='number'>2.58e-4</span> <span class='op'>*</span> <span class='ident'>C</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>KG</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>RAD_</span>: <span class='ident'>Meter2PerSecond2</span> <span class='op'>=</span> <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>ERG</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>REM_</span>: <span class='ident'>Meter2PerSecond2</span> <span class='op'>=</span> <span class='ident'>RAD_</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>IN_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>2.54</span> <span class='op'>*</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>FT_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>YD_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MI_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>5280.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>FTH_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>6.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>NMI_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>1852.0</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>KN_I</span>: <span class='ident'>MeterPerSecond</span> <span class='op'>=</span> <span class='ident'>NMI_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>HR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SIN_I</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SFT_I</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SYD_I</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='ident'>YD_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>YD_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CIN_I</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CFT_I</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CYD_I</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>YD_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>YD_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>YD_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BF_I</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>144.0</span> <span class='op'>*</span> <span class='ident'>CIN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CR_I</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>128.0</span> <span class='op'>*</span> <span class='ident'>CFT_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MIL_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>1.0e-3</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CML_I</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>/</span> <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>MIL_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>MIL_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>HD_I</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>FT_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>1200.0</span> <span class='op'>/</span> <span class='number'>3937.0</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>YD_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>FT_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>IN_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>FT_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>12.0</span>;
+            <span class='ident'>RD_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>16.5</span> <span class='op'>*</span> <span class='ident'>FT_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CH_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>RD_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LK_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>CH_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>100.0</span>;
+            <span class='ident'>RCH_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>FT_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>RLK_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>RCH_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>100.0</span>;
+            <span class='ident'>FTH_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>6.0</span> <span class='op'>*</span> <span class='ident'>FT_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>FUR_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>40.0</span> <span class='op'>*</span> <span class='ident'>RD_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MI_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>8.0</span> <span class='op'>*</span> <span class='ident'>FUR_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ACR_US</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='number'>160.0</span> <span class='op'>*</span> <span class='ident'>RD_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>RD_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SRD_US</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='ident'>RD_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>RD_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SMI_US</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='ident'>MI_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>MI_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SCT</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='ident'>MI_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>MI_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>TWP</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='number'>36.0</span> <span class='op'>*</span> <span class='ident'>SCT</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MIL_US</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>1.0e-3</span> <span class='op'>*</span> <span class='ident'>IN_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>IN_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>2.539998</span> <span class='op'>*</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>FT_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>IN_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>RD_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>16.5</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CH_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>RD_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LK_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>CH_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>100.0</span>;
+            <span class='ident'>FTH_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>6.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PC_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>2.5</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>YD_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MI_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>5280.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>NMI_BR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>6080.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>KN_BR</span>: <span class='ident'>MeterPerSecond</span> <span class='op'>=</span> <span class='ident'>NMI_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>HR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ACR_BR</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='number'>4840.0</span> <span class='op'>*</span> <span class='ident'>YD_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>YD_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GAL_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>231.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BBL_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>42.0</span> <span class='op'>*</span> <span class='ident'>GAL_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>QT_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>GAL_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>4.0</span>;
+            <span class='ident'>PT_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>QT_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>2.0</span>;
+            <span class='ident'>GIL_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>PT_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>4.0</span>;
+            <span class='ident'>FOZ_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>GIL_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>4.0</span>;
+            <span class='ident'>FDR_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>FOZ_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>8.0</span>;
+            <span class='ident'>MIN_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>FDR_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>60.0</span>;
+            <span class='ident'>CRD_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>CR_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BU_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>2150.42</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GAL_WI</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>BU_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>8.0</span>;
+            <span class='ident'>PK_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>BU_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>4.0</span>;
+            <span class='ident'>DQT_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>PK_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>8.0</span>;
+            <span class='ident'>DPT_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>DQT_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>2.0</span>;
+            <span class='ident'>TBS_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>FOZ_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>2.0</span>;
+            <span class='ident'>TSP_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>TBS_US</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>3.0</span>;
+            <span class='ident'>CUP_US</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>16.0</span> <span class='op'>*</span> <span class='ident'>TBS_US</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>FOZ_M</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>30.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CUP_M</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>240.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>TSP_M</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>5.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>TBS_M</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>15.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>GAL_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>4.54609</span> <span class='op'>*</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PK_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>2.0</span> <span class='op'>*</span> <span class='ident'>GAL_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BU_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>PK_BR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>QT_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>GAL_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>4.0</span>;
+            <span class='ident'>PT_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>QT_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>2.0</span>;
+            <span class='ident'>GIL_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>PT_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>4.0</span>;
+            <span class='ident'>FOZ_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>GIL_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>5.0</span>;
+            <span class='ident'>FDR_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>FOZ_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>8.0</span>;
+            <span class='ident'>MIN_BR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>FDR_BR</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>60.0</span>;
+            <span class='ident'>GR</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>64.79891</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LB_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>7000.0</span> <span class='op'>*</span> <span class='ident'>GR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>OZ_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='ident'>LB_AV</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>16.0</span>;
+            <span class='ident'>DR_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='ident'>OZ_AV</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>16.0</span>;
+            <span class='ident'>SCWT_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>LB_AV</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LCWT_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>112.0</span> <span class='op'>*</span> <span class='ident'>LB_AV</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>STON_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>SCWT_AV</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LTON_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>LCWT_AV</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>STONE_AV</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>14.0</span> <span class='op'>*</span> <span class='ident'>LB_AV</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PWT_TR</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>24.0</span> <span class='op'>*</span> <span class='ident'>GR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>OZ_TR</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>PWT_TR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LB_TR</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>OZ_TR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SC_AP</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>GR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>DR_AP</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>SC_AP</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>OZ_AP</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>8.0</span> <span class='op'>*</span> <span class='ident'>DR_AP</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LB_AP</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>OZ_AP</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>OZ_M</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>28.0</span> <span class='op'>*</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LNE</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>12.0</span>;
+            <span class='ident'>PNT</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>LNE</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>6.0</span>;
+            <span class='ident'>PCA</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>PNT</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PNT_PR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>0.013837</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PCA_PR</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>PNT_PR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PIED</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>32.48</span> <span class='op'>*</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>POUNCE</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>PIED</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>12.0</span>;
+            <span class='ident'>LIGNE</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>POUNCE</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>12.0</span>;
+            <span class='ident'>DIDOT</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>LIGNE</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>6.0</span>;
+            <span class='ident'>CICERO</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>DIDOT</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>DEGR</span>: <span class='ident'>Kelvin</span> <span class='op'>=</span> <span class='number'>5.0</span> <span class='op'>/</span> <span class='number'>9.0</span> <span class='op'>*</span> <span class='ident'>K</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAL_15</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>4.18580</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAL_20</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>4.18190</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAL_M</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>4.19002</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAL_IT</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>4.1868</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAL_TH</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>4.184</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAL</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='ident'>CAL_TH</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAL_</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>CAL</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BTU_39</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>1.05967</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BTU_59</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>1.05480</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BTU_60</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>1.05468</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BTU_M</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>1.05587</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BTU_IT</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>1.05505585262</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BTU_TH</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='number'>1.054350</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BTU</span>: <span class='ident'>MilliJoule</span> <span class='op'>=</span> <span class='ident'>BTU_TH</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>HP</span>: <span class='ident'>MilliWatt</span> <span class='op'>=</span> <span class='number'>550.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>LBF_AV</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>TEX</span>: <span class='ident'>GramPerMeter</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>*</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> (<span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>);
+            <span class='ident'>DEN</span>: <span class='ident'>GramPerMeter</span> <span class='op'>=</span> <span class='ident'>TEX</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>9.0</span>;
+            <span class='ident'>MH20</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> <span class='number'>9.80665</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>PA</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MHG</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> <span class='number'>133.3220</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>PA</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PRU</span>: <span class='ident'>GramPerMeter4Second</span> <span class='op'>=</span> <span class='ident'>MHG</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>DIOP</span>: <span class='ident'>PerMeter</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>/</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MESH_I</span>: <span class='ident'>PerMeter</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>/</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CH</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>/</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>DRP</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='number'>20.0</span>;
+            <span class='ident'>MET</span>: <span class='ident'>Meter3PerSecondGram</span> <span class='op'>=</span> <span class='number'>3.5</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>MIN</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>KG</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>EQ</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='ident'>MOL</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>OSM</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='ident'>MOL</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>S_</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>1.0e-13</span> <span class='op'>*</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>HPF</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>*</span> <span class='ident'>ONE</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>LPF</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>ONE</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>KAT</span>: <span class='ident'>Hertz</span> <span class='op'>=</span> <span class='ident'>MOL</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>S</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>U</span>: <span class='ident'>Hertz</span> <span class='op'>=</span> <span class='ident'>MICRO</span> <span class='op'>*</span> <span class='ident'>MOL</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>MIN</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>STR</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>*</span> <span class='ident'>M3</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>AO</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>0.1</span> <span class='op'>*</span> <span class='ident'>NANO</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>BRN</span>: <span class='ident'>Meter2</span> <span class='op'>=</span> <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>FEMTO</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span> <span class='op'>*</span> <span class='ident'>FEMTO</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>ATT</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>GF</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>CM</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>MHO</span>: <span class='ident'>KiloSiemens</span> <span class='op'>=</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>SIE</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>PSI</span>: <span class='ident'>MilliPascal</span> <span class='op'>=</span> <span class='ident'>LBF_AV</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span> <span class='op'>/</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CIRC</span>: <span class='ident'>Radian</span> <span class='op'>=</span> <span class='number'>2.0</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>RAD</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SPH</span>: <span class='ident'>Steradian</span> <span class='op'>=</span> <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>SR</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAR_M</span>: <span class='ident'>Gram</span> <span class='op'>=</span> <span class='number'>0.2</span> <span class='op'>*</span> <span class='ident'>G</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>CAR_AU</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='number'>1.0</span> <span class='op'>/</span> <span class='number'>24.0</span> <span class='op'>*</span> <span class='ident'>ONE</span>.<span class='ident'>value_unsafe</span>;
+            <span class='ident'>SMOOT</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>67.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span>.<span class='ident'>value_unsafe</span>;
+        }
+
+        <span class='ident'>fmt</span> <span class='op'>=</span> <span class='bool-val'>true</span>;
+    }
+
+    <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>f64consts</span>::<span class='kw-2'>*</span>;
+
+
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>test_ucum_constants</span>() {
+        <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_imports</span>)]</span>
+        <span class='kw'>use</span> <span class='ident'>f64prefixes</span>::<span class='kw-2'>*</span>;
+        <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused_imports</span>)]</span>
+        <span class='kw'>use</span> <span class='ident'>core</span>::<span class='ident'>f64</span>::<span class='ident'>consts</span>;
+
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>KG</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>G</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CM</span>, <span class='ident'>CENTI</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MOL</span>, <span class='number'>6.0221367e23</span> <span class='op'>*</span> <span class='ident'>ONE</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>N</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIN</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PA</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIPA</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>J</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIJ</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>W</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIW</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>V</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIV</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>F</span>, <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>KILOF</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>OHM</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIOHM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SIE</span>, <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>KILOSIE</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>WB</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIWB</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>T</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIT</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>H</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>MILLIH</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GON</span>, <span class='number'>0.9</span> <span class='op'>*</span> <span class='ident'>DEG</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DEG</span>, <span class='number'>2.0</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>/</span> <span class='number'>360.0</span> <span class='op'>*</span> <span class='ident'>RAD</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>L</span>, <span class='number'>0.1</span> <span class='op'>*</span> <span class='number'>0.1</span> <span class='op'>*</span> <span class='number'>0.1</span> <span class='op'>*</span> <span class='ident'>M3</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>AR</span>, <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>M2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MIN</span>, <span class='number'>60.0</span> <span class='op'>*</span> <span class='ident'>S</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>HR</span>, <span class='number'>60.0</span> <span class='op'>*</span> <span class='ident'>MIN</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>D</span>, <span class='number'>24.0</span> <span class='op'>*</span> <span class='ident'>HR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ANN_T</span>, <span class='number'>365.24219</span> <span class='op'>*</span> <span class='ident'>D</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ANN_J</span>, <span class='number'>365.25</span> <span class='op'>*</span> <span class='ident'>D</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ANN_G</span>, <span class='number'>365.2425</span> <span class='op'>*</span> <span class='ident'>D</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ANN</span>, <span class='ident'>ANN_J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>WK</span>, <span class='number'>7.0</span> <span class='op'>*</span> <span class='ident'>D</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MO_S</span>, <span class='number'>29.53059</span> <span class='op'>*</span> <span class='ident'>D</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MO_J</span>, <span class='ident'>ANN_J</span> <span class='op'>/</span> <span class='number'>12.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MO_G</span>, <span class='ident'>ANN_G</span> <span class='op'>/</span> <span class='number'>12.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MO</span>, <span class='ident'>MO_J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>TNE</span>, <span class='number'>1.0e3</span> <span class='op'>*</span> <span class='ident'>KG</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BAR</span>, <span class='number'>1.0e5</span> <span class='op'>*</span> <span class='ident'>PA</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>AMU</span>, <span class='number'>1.6605402e-24</span> <span class='op'>*</span> <span class='ident'>G</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>EV</span>, <span class='ident'>E</span> <span class='op'>*</span> <span class='ident'>V</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ASU</span>, <span class='number'>149597.870691e6</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PRS</span>, <span class='number'>3.085678e16</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>C_</span>, <span class='number'>299792458.0</span> <span class='op'>*</span> <span class='ident'>MPS</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>H_</span>, <span class='number'>6.6260755e-34</span> <span class='op'>*</span> <span class='ident'>J</span> <span class='op'>*</span> <span class='ident'>S</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>K_</span>, <span class='number'>1.380658e-23</span> <span class='op'>*</span> <span class='ident'>J</span> <span class='op'>/</span> <span class='ident'>K</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>EPS_0</span>, <span class='number'>8.854187817e-12</span> <span class='op'>*</span> <span class='ident'>F</span> <span class='op'>/</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MU_0</span>, <span class='number'>4.0e-7</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>N</span> <span class='op'>/</span> <span class='ident'>A</span> <span class='op'>/</span> <span class='ident'>A</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>E</span>, <span class='number'>1.6021766208e-19</span> <span class='op'>*</span> <span class='ident'>C</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>M_E</span>, <span class='number'>9.10938356e-31</span> <span class='op'>*</span> <span class='ident'>KG</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>M_P</span>, <span class='number'>1.6726231e-24</span> <span class='op'>*</span> <span class='ident'>G</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GC</span>, <span class='number'>6.67259e-11</span> <span class='op'>*</span> <span class='ident'>M3</span> <span class='op'>/</span> <span class='ident'>KG</span> <span class='op'>/</span> <span class='ident'>S2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>G_</span>, <span class='number'>9.80665</span> <span class='op'>*</span> <span class='ident'>M</span> <span class='op'>/</span> <span class='ident'>S2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ATM</span>, <span class='number'>101325.0</span> <span class='op'>*</span> <span class='ident'>PA</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LY</span>, <span class='ident'>C_</span> <span class='op'>*</span> <span class='ident'>ANN_J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GF</span>, <span class='ident'>G</span> <span class='op'>*</span> <span class='ident'>G_</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LBF_AV</span>, <span class='ident'>LB_AV</span> <span class='op'>*</span> <span class='ident'>G_</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>KY</span>, <span class='number'>1.0</span> <span class='op'>/</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GL</span>, <span class='ident'>CM</span> <span class='op'>/</span> <span class='ident'>S2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DYN</span>, <span class='ident'>G</span> <span class='op'>*</span> <span class='ident'>CM</span> <span class='op'>/</span> <span class='ident'>S2</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ERG</span>, <span class='ident'>DYN</span> <span class='op'>*</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>P</span>, <span class='ident'>DYN</span> <span class='op'>*</span> <span class='ident'>S</span> <span class='op'>/</span> <span class='ident'>CM</span> <span class='op'>/</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BI</span>, <span class='number'>10.0</span> <span class='op'>*</span> <span class='ident'>A</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ST</span>, <span class='ident'>CM</span> <span class='op'>*</span> <span class='ident'>CM</span> <span class='op'>/</span> <span class='ident'>S</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MX</span>, <span class='number'>1.0e-8</span> <span class='op'>*</span> <span class='ident'>WB</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GS</span>, <span class='number'>1.0e-4</span> <span class='op'>*</span> <span class='ident'>T</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>OE</span>, <span class='number'>250.0</span> <span class='op'>/</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>A</span> <span class='op'>/</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GB</span>, <span class='ident'>OE</span> <span class='op'>*</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SB</span>, <span class='ident'>CD</span> <span class='op'>/</span> <span class='ident'>CM</span> <span class='op'>/</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LMB</span>, <span class='ident'>SB</span> <span class='op'>/</span> <span class='ident'>consts</span>::<span class='ident'>PI</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PHT</span>, <span class='number'>1.0e-4</span> <span class='op'>*</span> <span class='ident'>LX</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CI</span>, <span class='number'>3.7e10</span> <span class='op'>*</span> <span class='ident'>BQ</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ROE</span>, <span class='number'>2.58e-4</span> <span class='op'>*</span> <span class='ident'>C</span> <span class='op'>/</span> <span class='ident'>KG</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>RAD_</span>, <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>ERG</span> <span class='op'>/</span> <span class='ident'>G</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>REM_</span>, <span class='ident'>RAD_</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>IN_I</span>, <span class='number'>2.54</span> <span class='op'>*</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FT_I</span>, <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>YD_I</span>, <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MI_I</span>, <span class='number'>5280.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FTH_I</span>, <span class='number'>6.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>NMI_I</span>, <span class='number'>1852.0</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>KN_I</span>, <span class='ident'>NMI_I</span> <span class='op'>/</span> <span class='ident'>HR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SIN_I</span>, <span class='ident'>IN_I</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SFT_I</span>, <span class='ident'>FT_I</span> <span class='op'>*</span> <span class='ident'>FT_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SYD_I</span>, <span class='ident'>YD_I</span> <span class='op'>*</span> <span class='ident'>YD_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CIN_I</span>, <span class='ident'>IN_I</span> <span class='op'>*</span> <span class='ident'>IN_I</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CFT_I</span>, <span class='ident'>FT_I</span> <span class='op'>*</span> <span class='ident'>FT_I</span> <span class='op'>*</span> <span class='ident'>FT_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CYD_I</span>, <span class='ident'>YD_I</span> <span class='op'>*</span> <span class='ident'>YD_I</span> <span class='op'>*</span> <span class='ident'>YD_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BF_I</span>, <span class='number'>144.0</span> <span class='op'>*</span> <span class='ident'>CIN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CR_I</span>, <span class='number'>128.0</span> <span class='op'>*</span> <span class='ident'>CFT_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MIL_I</span>, <span class='number'>1.0e-3</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CML_I</span>, <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>/</span> <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>MIL_I</span> <span class='op'>*</span> <span class='ident'>MIL_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>HD_I</span>, <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FT_US</span>, <span class='number'>1200.0</span> <span class='op'>/</span> <span class='number'>3937.0</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>YD_US</span>, <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>FT_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>IN_US</span>, <span class='ident'>FT_US</span> <span class='op'>/</span> <span class='number'>12.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>RD_US</span>, <span class='number'>16.5</span> <span class='op'>*</span> <span class='ident'>FT_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CH_US</span>, <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>RD_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LK_US</span>, <span class='ident'>CH_US</span> <span class='op'>/</span> <span class='number'>100.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>RCH_US</span>, <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>FT_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>RLK_US</span>, <span class='ident'>RCH_US</span> <span class='op'>/</span> <span class='number'>100.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FTH_US</span>, <span class='number'>6.0</span> <span class='op'>*</span> <span class='ident'>FT_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FUR_US</span>, <span class='number'>40.0</span> <span class='op'>*</span> <span class='ident'>RD_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MI_US</span>, <span class='number'>8.0</span> <span class='op'>*</span> <span class='ident'>FUR_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ACR_US</span>, <span class='number'>160.0</span> <span class='op'>*</span> <span class='ident'>RD_US</span> <span class='op'>*</span> <span class='ident'>RD_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SRD_US</span>, <span class='ident'>RD_US</span> <span class='op'>*</span> <span class='ident'>RD_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SMI_US</span>, <span class='ident'>MI_US</span> <span class='op'>*</span> <span class='ident'>MI_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SCT</span>, <span class='ident'>MI_US</span> <span class='op'>*</span> <span class='ident'>MI_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>TWP</span>, <span class='number'>36.0</span> <span class='op'>*</span> <span class='ident'>SCT</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MIL_US</span>, <span class='number'>1.0e-3</span> <span class='op'>*</span> <span class='ident'>IN_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>IN_BR</span>, <span class='number'>2.539998</span> <span class='op'>*</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FT_BR</span>, <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>IN_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>RD_BR</span>, <span class='number'>16.5</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CH_BR</span>, <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>RD_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LK_BR</span>, <span class='ident'>CH_BR</span> <span class='op'>/</span> <span class='number'>100.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FTH_BR</span>, <span class='number'>6.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PC_BR</span>, <span class='number'>2.5</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>YD_BR</span>, <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MI_BR</span>, <span class='number'>5280.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>NMI_BR</span>, <span class='number'>6080.0</span> <span class='op'>*</span> <span class='ident'>FT_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>KN_BR</span>, <span class='ident'>NMI_BR</span> <span class='op'>/</span> <span class='ident'>HR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ACR_BR</span>, <span class='number'>4840.0</span> <span class='op'>*</span> <span class='ident'>YD_BR</span> <span class='op'>*</span> <span class='ident'>YD_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GAL_US</span>, <span class='number'>231.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span> <span class='op'>*</span> <span class='ident'>IN_I</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BBL_US</span>, <span class='number'>42.0</span> <span class='op'>*</span> <span class='ident'>GAL_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>QT_US</span>, <span class='ident'>GAL_US</span> <span class='op'>/</span> <span class='number'>4.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PT_US</span>, <span class='ident'>QT_US</span> <span class='op'>/</span> <span class='number'>2.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GIL_US</span>, <span class='ident'>PT_US</span> <span class='op'>/</span> <span class='number'>4.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FOZ_US</span>, <span class='ident'>GIL_US</span> <span class='op'>/</span> <span class='number'>4.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FDR_US</span>, <span class='ident'>FOZ_US</span> <span class='op'>/</span> <span class='number'>8.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MIN_US</span>, <span class='ident'>FDR_US</span> <span class='op'>/</span> <span class='number'>60.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CRD_US</span>, <span class='ident'>CR_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BU_US</span>, <span class='number'>2150.42</span> <span class='op'>*</span> <span class='ident'>IN_I</span> <span class='op'>*</span> <span class='ident'>IN_I</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GAL_WI</span>, <span class='ident'>BU_US</span> <span class='op'>/</span> <span class='number'>8.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PK_US</span>, <span class='ident'>BU_US</span> <span class='op'>/</span> <span class='number'>4.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DQT_US</span>, <span class='ident'>PK_US</span> <span class='op'>/</span> <span class='number'>8.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DPT_US</span>, <span class='ident'>DQT_US</span> <span class='op'>/</span> <span class='number'>2.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>TBS_US</span>, <span class='ident'>FOZ_US</span> <span class='op'>/</span> <span class='number'>2.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>TSP_US</span>, <span class='ident'>TBS_US</span> <span class='op'>/</span> <span class='number'>3.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CUP_US</span>, <span class='number'>16.0</span> <span class='op'>*</span> <span class='ident'>TBS_US</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FOZ_M</span>, <span class='number'>30.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CUP_M</span>, <span class='number'>240.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>TSP_M</span>, <span class='number'>5.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>TBS_M</span>, <span class='number'>15.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GAL_BR</span>, <span class='number'>4.54609</span> <span class='op'>*</span> <span class='ident'>L</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PK_BR</span>, <span class='number'>2.0</span> <span class='op'>*</span> <span class='ident'>GAL_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BU_BR</span>, <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>PK_BR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>QT_BR</span>, <span class='ident'>GAL_BR</span> <span class='op'>/</span> <span class='number'>4.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PT_BR</span>, <span class='ident'>QT_BR</span> <span class='op'>/</span> <span class='number'>2.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GIL_BR</span>, <span class='ident'>PT_BR</span> <span class='op'>/</span> <span class='number'>4.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FOZ_BR</span>, <span class='ident'>GIL_BR</span> <span class='op'>/</span> <span class='number'>5.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>FDR_BR</span>, <span class='ident'>FOZ_BR</span> <span class='op'>/</span> <span class='number'>8.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MIN_BR</span>, <span class='ident'>FDR_BR</span> <span class='op'>/</span> <span class='number'>60.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>GR</span>, <span class='number'>64.79891</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>G</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LB_AV</span>, <span class='number'>7000.0</span> <span class='op'>*</span> <span class='ident'>GR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>OZ_AV</span>, <span class='ident'>LB_AV</span> <span class='op'>/</span> <span class='number'>16.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DR_AV</span>, <span class='ident'>OZ_AV</span> <span class='op'>/</span> <span class='number'>16.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SCWT_AV</span>, <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>LB_AV</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LCWT_AV</span>, <span class='number'>112.0</span> <span class='op'>*</span> <span class='ident'>LB_AV</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>STON_AV</span>, <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>SCWT_AV</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LTON_AV</span>, <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>LCWT_AV</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>STONE_AV</span>, <span class='number'>14.0</span> <span class='op'>*</span> <span class='ident'>LB_AV</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PWT_TR</span>, <span class='number'>24.0</span> <span class='op'>*</span> <span class='ident'>GR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>OZ_TR</span>, <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>PWT_TR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LB_TR</span>, <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>OZ_TR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SC_AP</span>, <span class='number'>20.0</span> <span class='op'>*</span> <span class='ident'>GR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DR_AP</span>, <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>SC_AP</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>OZ_AP</span>, <span class='number'>8.0</span> <span class='op'>*</span> <span class='ident'>DR_AP</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LB_AP</span>, <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>OZ_AP</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>OZ_M</span>, <span class='number'>28.0</span> <span class='op'>*</span> <span class='ident'>G</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LNE</span>, <span class='ident'>IN_I</span> <span class='op'>/</span> <span class='number'>12.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PNT</span>, <span class='ident'>LNE</span> <span class='op'>/</span> <span class='number'>6.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PCA</span>, <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>PNT</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PNT_PR</span>, <span class='number'>0.013837</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PCA_PR</span>, <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>PNT_PR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PIED</span>, <span class='number'>32.48</span> <span class='op'>*</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>POUNCE</span>, <span class='ident'>PIED</span> <span class='op'>/</span> <span class='number'>12.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LIGNE</span>, <span class='ident'>POUNCE</span> <span class='op'>/</span> <span class='number'>12.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DIDOT</span>, <span class='ident'>LIGNE</span> <span class='op'>/</span> <span class='number'>6.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CICERO</span>, <span class='number'>12.0</span> <span class='op'>*</span> <span class='ident'>DIDOT</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DEGR</span>, <span class='number'>5.0</span> <span class='op'>/</span> <span class='number'>9.0</span> <span class='op'>*</span> <span class='ident'>K</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAL_15</span>, <span class='number'>4.18580</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAL_20</span>, <span class='number'>4.18190</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAL_M</span>, <span class='number'>4.19002</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAL_IT</span>, <span class='number'>4.1868</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAL_TH</span>, <span class='number'>4.184</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAL</span>, <span class='ident'>CAL_TH</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAL_</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>CAL</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BTU_39</span>, <span class='number'>1.05967</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BTU_59</span>, <span class='number'>1.05480</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BTU_60</span>, <span class='number'>1.05468</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BTU_M</span>, <span class='number'>1.05587</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BTU_IT</span>, <span class='number'>1.05505585262</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BTU_TH</span>, <span class='number'>1.054350</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>J</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BTU</span>, <span class='ident'>BTU_TH</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>HP</span>, <span class='number'>550.0</span> <span class='op'>*</span> <span class='ident'>FT_I</span> <span class='op'>*</span> <span class='ident'>LBF_AV</span> <span class='op'>/</span> <span class='ident'>S</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>TEX</span>, <span class='number'>1.0</span> <span class='op'>*</span> <span class='ident'>G</span> <span class='op'>/</span> (<span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>M</span>));
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DEN</span>, <span class='ident'>TEX</span> <span class='op'>/</span> <span class='number'>9.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MH20</span>, <span class='number'>9.80665</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>PA</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MHG</span>, <span class='number'>133.3220</span> <span class='op'>*</span> <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>PA</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PRU</span>, <span class='ident'>MHG</span> <span class='op'>*</span> <span class='ident'>S</span> <span class='op'>/</span> <span class='ident'>L</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DIOP</span>, <span class='number'>1.0</span> <span class='op'>/</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MESH_I</span>, <span class='number'>1.0</span> <span class='op'>/</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CH</span>, <span class='number'>1.0</span> <span class='op'>/</span> <span class='number'>3.0</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>DRP</span>, <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span> <span class='op'>/</span> <span class='number'>20.0</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MET</span>, <span class='number'>3.5</span> <span class='op'>*</span> <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>L</span> <span class='op'>/</span> <span class='ident'>MIN</span> <span class='op'>/</span> <span class='ident'>KG</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>EQ</span>, <span class='ident'>MOL</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>OSM</span>, <span class='ident'>MOL</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>S_</span>, <span class='number'>1.0e-13</span> <span class='op'>*</span> <span class='ident'>S</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>HPF</span>, <span class='number'>1.0</span> <span class='op'>*</span> <span class='ident'>ONE</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>LPF</span>, <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>ONE</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>KAT</span>, <span class='ident'>MOL</span> <span class='op'>/</span> <span class='ident'>S</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>U</span>, <span class='ident'>MICRO</span> <span class='op'>*</span> <span class='ident'>MOL</span> <span class='op'>/</span> <span class='ident'>MIN</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>STR</span>, <span class='number'>1.0</span> <span class='op'>*</span> <span class='ident'>M3</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>AO</span>, <span class='number'>0.1</span> <span class='op'>*</span> <span class='ident'>NANO</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>BRN</span>, <span class='number'>100.0</span> <span class='op'>*</span> <span class='ident'>FEMTO</span> <span class='op'>*</span> <span class='ident'>M</span> <span class='op'>*</span> <span class='ident'>FEMTO</span> <span class='op'>*</span> <span class='ident'>M</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>ATT</span>, <span class='ident'>KILO</span> <span class='op'>*</span> <span class='ident'>GF</span> <span class='op'>/</span> <span class='ident'>CM</span> <span class='op'>/</span> <span class='ident'>CM</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>MHO</span>, <span class='ident'>MILLI</span> <span class='op'>*</span> <span class='ident'>SIE</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>PSI</span>, <span class='ident'>LBF_AV</span> <span class='op'>/</span> <span class='ident'>IN_I</span> <span class='op'>/</span> <span class='ident'>IN_I</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CIRC</span>, <span class='number'>2.0</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>RAD</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SPH</span>, <span class='number'>4.0</span> <span class='op'>*</span> <span class='ident'>consts</span>::<span class='ident'>PI</span> <span class='op'>*</span> <span class='ident'>SR</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAR_M</span>, <span class='number'>0.2</span> <span class='op'>*</span> <span class='ident'>G</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>CAR_AU</span>, <span class='number'>1.0</span> <span class='op'>/</span> <span class='number'>24.0</span> <span class='op'>*</span> <span class='ident'>ONE</span>);
+        <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>SMOOT</span>, <span class='number'>67.0</span> <span class='op'>*</span> <span class='ident'>IN_I</span>);
+    }
+}</pre>
+</section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../../../../../../../../../../";
+        window.currentCrate = "dimensioned";
+    </script>
+    <script src="../../../../../../../../../../../../jquery.js"></script>
+    <script src="../../../../../../../../../../../../main.js"></script>
+    <script defer src="../../../../../../../../../../../../search-index.js"></script>
+</body>
+</html>

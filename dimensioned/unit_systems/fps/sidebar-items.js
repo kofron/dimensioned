@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["f32consts","Constants defined for this system"],["f64consts","Constants defined for this system"]],"struct":[["FPS","The struct for this unit system"]],"type":[["Foot",""],["Pound",""],["Second",""],["SqrtFoot",""],["SqrtPound",""],["Unitless",""]]});

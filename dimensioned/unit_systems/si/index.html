@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `si` mod in crate `dimensioned`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, si">
+
+    <title>dimensioned::unit_systems::si - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <a href='../../../dimensioned/index.html'><img src='https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png' alt='logo' width='100'></a>
+        <p class='location'><a href='../../index.html'>dimensioned</a>::<wbr><a href='../index.html'>unit_systems</a></p><script>window.sidebarCurrent = {name: 'si', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../../index.html'>dimensioned</a>::<wbr><a href='../index.html'>unit_systems</a>::<wbr><a class='mod' href=''>si</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/dimensioned/home/travis/build/paholg/dimensioned/target/debug/build/dimensioned-4e2d7469da395cfc/out/si.rs.html#175-382' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>The International System of Units (SI)</p>
+
+<p>Where experimental values are used for constants, the values are obtained from the 2014 values from
+<a href="http://physics.nist.gov/cuu/Constants/">The NIST Reference on Constants, Unit, and Uncertainty</a>.</p>
+
+<p>Following, we list all of the <a href="#base-units">base units</a>, <a href="#derived-units">derived units</a>, and
+<a href="#constants">constants</a> that are defined in this unit system.</p>
+
+<h1 id='base-units' class='section-header'><a href='#base-units'>Base Units</a></h1>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Unit</th>
+<th>Print Token</th>
+<th>Dimensionn</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>M</td>
+<td>Meter</td>
+<td>m</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>KG</td>
+<td>Kilogram</td>
+<td>kg</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>S</td>
+<td>Second</td>
+<td>s</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Ampere</td>
+<td>A</td>
+<td>Current</td>
+</tr>
+<tr>
+<td>K</td>
+<td>Kelvin</td>
+<td>K</td>
+<td>Temperature</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>Candela</td>
+<td>cd</td>
+<td>LuminousIntensity</td>
+</tr>
+<tr>
+<td>MOL</td>
+<td>Mole</td>
+<td>mol</td>
+<td>AmountOfSubstance</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id='derived-units' class='section-header'><a href='#derived-units'>Derived Units</a></h1>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Unit</th>
+<th>Unit Definition</th>
+<th>Dimension</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>HZ</td>
+<td>Hertz</td>
+<td>Unitless / Second</td>
+<td>Frequency</td>
+</tr>
+<tr>
+<td>N</td>
+<td>Newton</td>
+<td>Kilogram * Meter / Second2</td>
+<td>Force</td>
+</tr>
+<tr>
+<td>PA</td>
+<td>Pascal</td>
+<td>Newton / Meter2</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>J</td>
+<td>Joule</td>
+<td>Newton * Meter</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>W</td>
+<td>Watt</td>
+<td>Joule / Second</td>
+<td>Power</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Coulomb</td>
+<td>Second * Ampere</td>
+<td>Charge</td>
+</tr>
+<tr>
+<td>V</td>
+<td>Volt</td>
+<td>Watt / Ampere</td>
+<td>ElectricPotential</td>
+</tr>
+<tr>
+<td>F</td>
+<td>Farad</td>
+<td>Coulomb / Volt</td>
+<td>Capacitance</td>
+</tr>
+<tr>
+<td>OHM</td>
+<td>Ohm</td>
+<td>Volt / Ampere</td>
+<td>Resistance</td>
+</tr>
+<tr>
+<td>SIE</td>
+<td>Siemens</td>
+<td>Ampere / Volt</td>
+<td>Conductance</td>
+</tr>
+<tr>
+<td>WB</td>
+<td>Weber</td>
+<td>Joule / Ampere</td>
+<td>MagneticFlux</td>
+</tr>
+<tr>
+<td>T</td>
+<td>Tesla</td>
+<td>Weber / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>H</td>
+<td>Henry</td>
+<td>Ohm * Second</td>
+<td>Inductance</td>
+</tr>
+<tr>
+<td>LM</td>
+<td>Lumen</td>
+<td>Candela</td>
+<td></td>
+</tr>
+<tr>
+<td>LX</td>
+<td>Lux</td>
+<td>Candela / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>BQ</td>
+<td>Becquerel</td>
+<td>Hertz</td>
+<td></td>
+</tr>
+<tr>
+<td>GY</td>
+<td>Gray</td>
+<td>Joule / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>SV</td>
+<td>Sievert</td>
+<td>Gray</td>
+<td></td>
+</tr>
+<tr>
+<td>KAT</td>
+<td>Katal</td>
+<td>Mole / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>M2</td>
+<td>Meter2</td>
+<td>Meter * Meter</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>Meter3</td>
+<td>Meter2 * Meter</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>PM</td>
+<td>PerMeter</td>
+<td>Unitless / Meter</td>
+<td>ReciprocalLength</td>
+</tr>
+<tr>
+<td>PM2</td>
+<td>PerMeter2</td>
+<td>PerMeter / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>PM3</td>
+<td>PerMeter3</td>
+<td>PerMeter2 / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>Second2</td>
+<td>Second * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>Second3</td>
+<td>Second2 * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>S4</td>
+<td>Second4</td>
+<td>Second3 * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>PS2</td>
+<td>PerSecond2</td>
+<td>Unitless / Second2</td>
+<td></td>
+</tr>
+<tr>
+<td>PS3</td>
+<td>PerSecond3</td>
+<td>Unitless / Second3</td>
+<td></td>
+</tr>
+<tr>
+<td>PS4</td>
+<td>PerSecond4</td>
+<td>Unitless / Second4</td>
+<td></td>
+</tr>
+<tr>
+<td>MPS</td>
+<td>MeterPerSecond</td>
+<td>Meter / Second</td>
+<td>Velocity</td>
+</tr>
+<tr>
+<td>MPS2</td>
+<td>MeterPerSecond2</td>
+<td>Meter / Second2</td>
+<td>Acceleration</td>
+</tr>
+<tr>
+<td>MPS3</td>
+<td>MeterPerSecond3</td>
+<td>Meter / Second3</td>
+<td>Jerk</td>
+</tr>
+<tr>
+<td>MPS4</td>
+<td>MeterPerSecond4</td>
+<td>Meter / Second4</td>
+<td></td>
+</tr>
+<tr>
+<td>M2PS</td>
+<td>Meter2PerSecond</td>
+<td>Meter2 / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>M2PS2</td>
+<td>Meter2PerSecond2</td>
+<td>Meter2 / Second2</td>
+<td></td>
+</tr>
+<tr>
+<td>M2PS3</td>
+<td>Meter2PerSecond3</td>
+<td>Meter2 / Second3</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PS</td>
+<td>Meter3PerSecond</td>
+<td>Meter3 / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PS2</td>
+<td>Meter3PerSecond2</td>
+<td>Meter3 / Second2</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PS3</td>
+<td>Meter3PerSecond3</td>
+<td>Meter3 / Second3</td>
+<td></td>
+</tr>
+<tr>
+<td>NS</td>
+<td>NewtonSecond</td>
+<td>Newton * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>JS</td>
+<td>JouleSecond</td>
+<td>Joule * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>NPS</td>
+<td>NewtonPerSecond</td>
+<td>Newton / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>KGPM</td>
+<td>KilogramPerMeter</td>
+<td>Kilogram / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>KGPM2</td>
+<td>KilogramPerMeter2</td>
+<td>Kilogram / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>KGPM3</td>
+<td>KilogramPerMeter3</td>
+<td>Kilogram / Meter3</td>
+<td></td>
+</tr>
+<tr>
+<td>MPKG</td>
+<td>MeterPerKilogram</td>
+<td>Meter / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>M2PKG</td>
+<td>Meter2PerKilogram</td>
+<td>Meter2 / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PKG</td>
+<td>Meter3PerKilogram</td>
+<td>Meter3 / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>MOLPM</td>
+<td>MolePerMeter</td>
+<td>Mole / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>MOLPM2</td>
+<td>MolePerMeter2</td>
+<td>Mole / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>MOLPM3</td>
+<td>MolePerMeter3</td>
+<td>Mole / Meter3</td>
+<td></td>
+</tr>
+<tr>
+<td>MPMOL</td>
+<td>MeterPerMole</td>
+<td>Meter / Mole</td>
+<td></td>
+</tr>
+<tr>
+<td>M2PMOL</td>
+<td>Meter2PerMole</td>
+<td>Meter2 / Mole</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PMOL</td>
+<td>Meter3PerMole</td>
+<td>Meter3 / Mole</td>
+<td></td>
+</tr>
+<tr>
+<td>JPK</td>
+<td>JoulePerKelvin</td>
+<td>Joule / Kelvin</td>
+<td></td>
+</tr>
+<tr>
+<td>JPKMOL</td>
+<td>JoulePerKelvinMole</td>
+<td>JoulePerKelvin / Mole</td>
+<td></td>
+</tr>
+<tr>
+<td>JPKGK</td>
+<td>JoulePerKilogramKelvin</td>
+<td>JoulePerKelvin / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>JPMOL</td>
+<td>JoulePerMole</td>
+<td>Joule / Mole</td>
+<td></td>
+</tr>
+<tr>
+<td>JPKG</td>
+<td>JoulePerKilogram</td>
+<td>Joule / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>JPM2</td>
+<td>JoulePerMeter2</td>
+<td>Joule / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>JPM3</td>
+<td>JoulePerMeter3</td>
+<td>Joule / Meter3</td>
+<td></td>
+</tr>
+<tr>
+<td>NPM</td>
+<td>NewtonPerMeter</td>
+<td>JoulePerMeter2</td>
+<td></td>
+</tr>
+<tr>
+<td>WPM2</td>
+<td>WattPerMeter2</td>
+<td>Watt / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>WPMK</td>
+<td>WattPerMeterKelvin</td>
+<td>Watt / Meter / Kelvin</td>
+<td></td>
+</tr>
+<tr>
+<td>PAS</td>
+<td>PascalSecond</td>
+<td>Pascal * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>CPM2</td>
+<td>CoulombPerMeter2</td>
+<td>Coulomb / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>CPM3</td>
+<td>CoulombPerMeter3</td>
+<td>Coulomb / Meter3</td>
+<td></td>
+</tr>
+<tr>
+<td>APM2</td>
+<td>AmperePerMeter2</td>
+<td>Ampere / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>SIEPM</td>
+<td>SiemensPerMeter</td>
+<td>Siemens / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>SIEM2PMOL</td>
+<td>SiemensMeter2PerMole</td>
+<td>Siemens * Meter2 / Mole</td>
+<td></td>
+</tr>
+<tr>
+<td>FPM</td>
+<td>FaradPerMeter</td>
+<td>Farad / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>HPM</td>
+<td>HenryPerMeter</td>
+<td>Henry / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>VPM</td>
+<td>VoltPerMeter</td>
+<td>Volt / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>APM</td>
+<td>AmperePerMeter</td>
+<td>Ampere / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>CDPM2</td>
+<td>CandelaPerMeter2</td>
+<td>Candela / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>LMS</td>
+<td>LumenSecond</td>
+<td>Lumen * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>LXS</td>
+<td>LuxSecond</td>
+<td>Lux * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>CPKG</td>
+<td>CoulombPerKilogram</td>
+<td>Coulomb / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>GYPS</td>
+<td>GrayPerSecond</td>
+<td>Gray / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>OHMM</td>
+<td>OhmMeter</td>
+<td>Ohm * Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>CPM</td>
+<td>CoulombPerMeter</td>
+<td>Coulomb / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>MOLPKG</td>
+<td>MolePerKilogram</td>
+<td>Mole / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>KGPMOL</td>
+<td>KilogramPerMole</td>
+<td>Kilogram / Mole</td>
+<td></td>
+</tr>
+<tr>
+<td>KGPS</td>
+<td>KilogramPerSecomd</td>
+<td>Kilogram / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>JPT</td>
+<td>JoulePerTesla</td>
+<td>Joule / Tesla</td>
+<td></td>
+</tr>
+<tr>
+<td>WPM3</td>
+<td>WattPerMeter3</td>
+<td>Watt / Meter3</td>
+<td></td>
+</tr>
+<tr>
+<td>KPW</td>
+<td>KelvinPerWatt</td>
+<td>Kelvin / Watt</td>
+<td></td>
+</tr>
+<tr>
+<td>PK</td>
+<td>PerKelvin</td>
+<td>Unitless / Kelvin</td>
+<td></td>
+</tr>
+<tr>
+<td>KPM</td>
+<td>KelvinPerMeter</td>
+<td>Kelvin / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>M2PVS</td>
+<td>Meter2PerVoltSecond</td>
+<td>Meter2 / Volt / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>JPM2S</td>
+<td>JoulePerMeter2Second</td>
+<td>JoulePerMeter2 / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>PPA</td>
+<td>PerPascal</td>
+<td>Unitless / Pascal</td>
+<td></td>
+</tr>
+<tr>
+<td>PH</td>
+<td>PerHenry</td>
+<td>Unitless / Henry</td>
+<td></td>
+</tr>
+<tr>
+<td>WBPM</td>
+<td>WeberPerMeter</td>
+<td>Weber / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>WBM</td>
+<td>WeberMeter</td>
+<td>Weber * Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>TM</td>
+<td>TeslaMeter</td>
+<td>Tesla * Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PMOLS</td>
+<td>Meter3PerMoleSecond</td>
+<td>Meter3 / Mole / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>NMSPKG</td>
+<td>NewtonMeterSecondPerKilogram</td>
+<td>Newton * Meter * Second / Kilogram</td>
+<td></td>
+</tr>
+<tr>
+<td>LMPW</td>
+<td>LumenPerWatt</td>
+<td>Lumen / Watt</td>
+<td></td>
+</tr>
+<tr>
+<td>MPH</td>
+<td>MeterPerHenry</td>
+<td>Meter / Henry</td>
+<td></td>
+</tr>
+<tr>
+<td>WPM</td>
+<td>WattPerMeter</td>
+<td>Watt / Meter</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h1 id='constants' class='section-header'><a href='#constants'>Constants</a></h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Constant</th>
+<th>Value</th>
+<th>Unit</th>
+<th>Dimension</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Astronomical unit</td>
+<td>AU</td>
+<td>149597870700.0 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Bohr radius</td>
+<td>R_BOHR</td>
+<td>0.52917721067e-10 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Ångström</td>
+<td>AO</td>
+<td>1e-10 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Foot</td>
+<td>FT</td>
+<td>0.3048 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Inch</td>
+<td>IN</td>
+<td>FT / 12.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Yard</td>
+<td>YD</td>
+<td>3.0 * FT</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Mile</td>
+<td>MI</td>
+<td>5280.0 * FT</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Tonne</td>
+<td>TNE</td>
+<td>1.0e3 * KG</td>
+<td>Kilogram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Unified atomic mass unit; dalton</td>
+<td>U</td>
+<td>1.660539040e-27 * KG</td>
+<td>Kilogram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Electron mass</td>
+<td>M_E</td>
+<td>9.10938356e-31 * KG</td>
+<td>Kilogram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Pound mass</td>
+<td>LB</td>
+<td>0.45359237 * KG</td>
+<td>Kilogram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Ounce</td>
+<td>OZ</td>
+<td>LB / 16.0</td>
+<td>Kilogram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Minute</td>
+<td>MIN</td>
+<td>60.0 * S</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Hour</td>
+<td>HR</td>
+<td>60.0 * MIN</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Day</td>
+<td>DAY</td>
+<td>24.0 * HR</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Dyne</td>
+<td>DYN</td>
+<td>1.0e-5 * N</td>
+<td>Newton</td>
+<td>Force</td>
+</tr>
+<tr>
+<td>Pound force</td>
+<td>LBF</td>
+<td>4.4482216152605 * N</td>
+<td>Newton</td>
+<td>Force</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Bar</td>
+<td>BAR</td>
+<td>1e5 * PA</td>
+<td>Pascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Millibar</td>
+<td>MBAR</td>
+<td>100.0 * PA</td>
+<td>Pascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Atmosphere</td>
+<td>ATM</td>
+<td>101325.0 * PA</td>
+<td>Pascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Barye</td>
+<td>BA</td>
+<td>0.1 * PA</td>
+<td>Pascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Millimeter of mercury</td>
+<td>MMHG</td>
+<td>133.322387415 * PA</td>
+<td>Pascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Torr</td>
+<td>TORR</td>
+<td>ATM / 760.0</td>
+<td>Pascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Electronvolt</td>
+<td>EV</td>
+<td>E * V</td>
+<td>Joule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Hartree energy</td>
+<td>EH</td>
+<td>4.359744650e-18 * J</td>
+<td>Joule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Elementary charge</td>
+<td>E</td>
+<td>1.6021766208e-19 * C</td>
+<td>Coulomb</td>
+<td>Charge</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Hectare</td>
+<td>HA</td>
+<td>10000.0 * M2</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>Are</td>
+<td>ARE</td>
+<td>100.0 * M2</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>Barn</td>
+<td>BARN</td>
+<td>1e-28 * M2</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Liter</td>
+<td>L</td>
+<td>0.001 * M3</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Speed of light in a vacuum</td>
+<td>C0</td>
+<td>299792458.0 * MPS</td>
+<td>MeterPerSecond</td>
+<td>Velocity</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Reduced Planck constant</td>
+<td>HBAR</td>
+<td>1.054571800e-34 * JS</td>
+<td>JouleSecond</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use self::<a class='mod' href='../../../dimensioned/unit_systems/si/f64consts/index.html' title='dimensioned::unit_systems::si::f64consts'>f64consts</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='f32consts/index.html'
+                                  title='dimensioned::unit_systems::si::f32consts'>f32consts</a></td>
+                           <td class='docblock-short'>
+                                <p>Constants defined for this system</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='f64consts/index.html'
+                                  title='dimensioned::unit_systems::si::f64consts'>f64consts</a></td>
+                           <td class='docblock-short'>
+                                <p>Constants defined for this system</p>
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.SI.html'
+                                  title='dimensioned::unit_systems::si::SI'>SI</a></td>
+                           <td class='docblock-short'>
+                                <p>The struct for this unit system</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Ampere.html'
+                                  title='dimensioned::unit_systems::si::Ampere'>Ampere</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.AmperePerMeter.html'
+                                  title='dimensioned::unit_systems::si::AmperePerMeter'>AmperePerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.AmperePerMeter2.html'
+                                  title='dimensioned::unit_systems::si::AmperePerMeter2'>AmperePerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Becquerel.html'
+                                  title='dimensioned::unit_systems::si::Becquerel'>Becquerel</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Candela.html'
+                                  title='dimensioned::unit_systems::si::Candela'>Candela</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CandelaPerMeter2.html'
+                                  title='dimensioned::unit_systems::si::CandelaPerMeter2'>CandelaPerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Coulomb.html'
+                                  title='dimensioned::unit_systems::si::Coulomb'>Coulomb</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CoulombPerKilogram.html'
+                                  title='dimensioned::unit_systems::si::CoulombPerKilogram'>CoulombPerKilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CoulombPerMeter.html'
+                                  title='dimensioned::unit_systems::si::CoulombPerMeter'>CoulombPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CoulombPerMeter2.html'
+                                  title='dimensioned::unit_systems::si::CoulombPerMeter2'>CoulombPerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CoulombPerMeter3.html'
+                                  title='dimensioned::unit_systems::si::CoulombPerMeter3'>CoulombPerMeter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Farad.html'
+                                  title='dimensioned::unit_systems::si::Farad'>Farad</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.FaradPerMeter.html'
+                                  title='dimensioned::unit_systems::si::FaradPerMeter'>FaradPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Gray.html'
+                                  title='dimensioned::unit_systems::si::Gray'>Gray</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.GrayPerSecond.html'
+                                  title='dimensioned::unit_systems::si::GrayPerSecond'>GrayPerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Henry.html'
+                                  title='dimensioned::unit_systems::si::Henry'>Henry</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.HenryPerMeter.html'
+                                  title='dimensioned::unit_systems::si::HenryPerMeter'>HenryPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Hertz.html'
+                                  title='dimensioned::unit_systems::si::Hertz'>Hertz</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Joule.html'
+                                  title='dimensioned::unit_systems::si::Joule'>Joule</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerKelvin.html'
+                                  title='dimensioned::unit_systems::si::JoulePerKelvin'>JoulePerKelvin</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerKelvinMole.html'
+                                  title='dimensioned::unit_systems::si::JoulePerKelvinMole'>JoulePerKelvinMole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerKilogram.html'
+                                  title='dimensioned::unit_systems::si::JoulePerKilogram'>JoulePerKilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerKilogramKelvin.html'
+                                  title='dimensioned::unit_systems::si::JoulePerKilogramKelvin'>JoulePerKilogramKelvin</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerMeter2.html'
+                                  title='dimensioned::unit_systems::si::JoulePerMeter2'>JoulePerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerMeter2Second.html'
+                                  title='dimensioned::unit_systems::si::JoulePerMeter2Second'>JoulePerMeter2Second</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerMeter3.html'
+                                  title='dimensioned::unit_systems::si::JoulePerMeter3'>JoulePerMeter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerMole.html'
+                                  title='dimensioned::unit_systems::si::JoulePerMole'>JoulePerMole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JoulePerTesla.html'
+                                  title='dimensioned::unit_systems::si::JoulePerTesla'>JoulePerTesla</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.JouleSecond.html'
+                                  title='dimensioned::unit_systems::si::JouleSecond'>JouleSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Katal.html'
+                                  title='dimensioned::unit_systems::si::Katal'>Katal</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Kelvin.html'
+                                  title='dimensioned::unit_systems::si::Kelvin'>Kelvin</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KelvinPerMeter.html'
+                                  title='dimensioned::unit_systems::si::KelvinPerMeter'>KelvinPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KelvinPerWatt.html'
+                                  title='dimensioned::unit_systems::si::KelvinPerWatt'>KelvinPerWatt</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Kilogram.html'
+                                  title='dimensioned::unit_systems::si::Kilogram'>Kilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KilogramPerMeter.html'
+                                  title='dimensioned::unit_systems::si::KilogramPerMeter'>KilogramPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KilogramPerMeter2.html'
+                                  title='dimensioned::unit_systems::si::KilogramPerMeter2'>KilogramPerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KilogramPerMeter3.html'
+                                  title='dimensioned::unit_systems::si::KilogramPerMeter3'>KilogramPerMeter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KilogramPerMole.html'
+                                  title='dimensioned::unit_systems::si::KilogramPerMole'>KilogramPerMole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KilogramPerSecomd.html'
+                                  title='dimensioned::unit_systems::si::KilogramPerSecomd'>KilogramPerSecomd</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Lumen.html'
+                                  title='dimensioned::unit_systems::si::Lumen'>Lumen</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.LumenPerWatt.html'
+                                  title='dimensioned::unit_systems::si::LumenPerWatt'>LumenPerWatt</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.LumenSecond.html'
+                                  title='dimensioned::unit_systems::si::LumenSecond'>LumenSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Lux.html'
+                                  title='dimensioned::unit_systems::si::Lux'>Lux</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.LuxSecond.html'
+                                  title='dimensioned::unit_systems::si::LuxSecond'>LuxSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter.html'
+                                  title='dimensioned::unit_systems::si::Meter'>Meter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2.html'
+                                  title='dimensioned::unit_systems::si::Meter2'>Meter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerKilogram.html'
+                                  title='dimensioned::unit_systems::si::Meter2PerKilogram'>Meter2PerKilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerMole.html'
+                                  title='dimensioned::unit_systems::si::Meter2PerMole'>Meter2PerMole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerSecond.html'
+                                  title='dimensioned::unit_systems::si::Meter2PerSecond'>Meter2PerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerSecond2.html'
+                                  title='dimensioned::unit_systems::si::Meter2PerSecond2'>Meter2PerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerSecond3.html'
+                                  title='dimensioned::unit_systems::si::Meter2PerSecond3'>Meter2PerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerVoltSecond.html'
+                                  title='dimensioned::unit_systems::si::Meter2PerVoltSecond'>Meter2PerVoltSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3.html'
+                                  title='dimensioned::unit_systems::si::Meter3'>Meter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerKilogram.html'
+                                  title='dimensioned::unit_systems::si::Meter3PerKilogram'>Meter3PerKilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerMole.html'
+                                  title='dimensioned::unit_systems::si::Meter3PerMole'>Meter3PerMole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerMoleSecond.html'
+                                  title='dimensioned::unit_systems::si::Meter3PerMoleSecond'>Meter3PerMoleSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerSecond.html'
+                                  title='dimensioned::unit_systems::si::Meter3PerSecond'>Meter3PerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerSecond2.html'
+                                  title='dimensioned::unit_systems::si::Meter3PerSecond2'>Meter3PerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerSecond3.html'
+                                  title='dimensioned::unit_systems::si::Meter3PerSecond3'>Meter3PerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerHenry.html'
+                                  title='dimensioned::unit_systems::si::MeterPerHenry'>MeterPerHenry</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerKilogram.html'
+                                  title='dimensioned::unit_systems::si::MeterPerKilogram'>MeterPerKilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerMole.html'
+                                  title='dimensioned::unit_systems::si::MeterPerMole'>MeterPerMole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerSecond.html'
+                                  title='dimensioned::unit_systems::si::MeterPerSecond'>MeterPerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerSecond2.html'
+                                  title='dimensioned::unit_systems::si::MeterPerSecond2'>MeterPerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerSecond3.html'
+                                  title='dimensioned::unit_systems::si::MeterPerSecond3'>MeterPerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerSecond4.html'
+                                  title='dimensioned::unit_systems::si::MeterPerSecond4'>MeterPerSecond4</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Mole.html'
+                                  title='dimensioned::unit_systems::si::Mole'>Mole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MolePerKilogram.html'
+                                  title='dimensioned::unit_systems::si::MolePerKilogram'>MolePerKilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MolePerMeter.html'
+                                  title='dimensioned::unit_systems::si::MolePerMeter'>MolePerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MolePerMeter2.html'
+                                  title='dimensioned::unit_systems::si::MolePerMeter2'>MolePerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MolePerMeter3.html'
+                                  title='dimensioned::unit_systems::si::MolePerMeter3'>MolePerMeter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Newton.html'
+                                  title='dimensioned::unit_systems::si::Newton'>Newton</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.NewtonMeterSecondPerKilogram.html'
+                                  title='dimensioned::unit_systems::si::NewtonMeterSecondPerKilogram'>NewtonMeterSecondPerKilogram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.NewtonPerMeter.html'
+                                  title='dimensioned::unit_systems::si::NewtonPerMeter'>NewtonPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.NewtonPerSecond.html'
+                                  title='dimensioned::unit_systems::si::NewtonPerSecond'>NewtonPerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.NewtonSecond.html'
+                                  title='dimensioned::unit_systems::si::NewtonSecond'>NewtonSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Ohm.html'
+                                  title='dimensioned::unit_systems::si::Ohm'>Ohm</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.OhmMeter.html'
+                                  title='dimensioned::unit_systems::si::OhmMeter'>OhmMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Pascal.html'
+                                  title='dimensioned::unit_systems::si::Pascal'>Pascal</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PascalSecond.html'
+                                  title='dimensioned::unit_systems::si::PascalSecond'>PascalSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerHenry.html'
+                                  title='dimensioned::unit_systems::si::PerHenry'>PerHenry</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerKelvin.html'
+                                  title='dimensioned::unit_systems::si::PerKelvin'>PerKelvin</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerMeter.html'
+                                  title='dimensioned::unit_systems::si::PerMeter'>PerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerMeter2.html'
+                                  title='dimensioned::unit_systems::si::PerMeter2'>PerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerMeter3.html'
+                                  title='dimensioned::unit_systems::si::PerMeter3'>PerMeter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerPascal.html'
+                                  title='dimensioned::unit_systems::si::PerPascal'>PerPascal</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerSecond2.html'
+                                  title='dimensioned::unit_systems::si::PerSecond2'>PerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerSecond3.html'
+                                  title='dimensioned::unit_systems::si::PerSecond3'>PerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerSecond4.html'
+                                  title='dimensioned::unit_systems::si::PerSecond4'>PerSecond4</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second.html'
+                                  title='dimensioned::unit_systems::si::Second'>Second</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second2.html'
+                                  title='dimensioned::unit_systems::si::Second2'>Second2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second3.html'
+                                  title='dimensioned::unit_systems::si::Second3'>Second3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second4.html'
+                                  title='dimensioned::unit_systems::si::Second4'>Second4</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Siemens.html'
+                                  title='dimensioned::unit_systems::si::Siemens'>Siemens</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.SiemensMeter2PerMole.html'
+                                  title='dimensioned::unit_systems::si::SiemensMeter2PerMole'>SiemensMeter2PerMole</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.SiemensPerMeter.html'
+                                  title='dimensioned::unit_systems::si::SiemensPerMeter'>SiemensPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Sievert.html'
+                                  title='dimensioned::unit_systems::si::Sievert'>Sievert</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Tesla.html'
+                                  title='dimensioned::unit_systems::si::Tesla'>Tesla</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.TeslaMeter.html'
+                                  title='dimensioned::unit_systems::si::TeslaMeter'>TeslaMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Unitless.html'
+                                  title='dimensioned::unit_systems::si::Unitless'>Unitless</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Volt.html'
+                                  title='dimensioned::unit_systems::si::Volt'>Volt</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.VoltPerMeter.html'
+                                  title='dimensioned::unit_systems::si::VoltPerMeter'>VoltPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Watt.html'
+                                  title='dimensioned::unit_systems::si::Watt'>Watt</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.WattPerMeter.html'
+                                  title='dimensioned::unit_systems::si::WattPerMeter'>WattPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.WattPerMeter2.html'
+                                  title='dimensioned::unit_systems::si::WattPerMeter2'>WattPerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.WattPerMeter3.html'
+                                  title='dimensioned::unit_systems::si::WattPerMeter3'>WattPerMeter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.WattPerMeterKelvin.html'
+                                  title='dimensioned::unit_systems::si::WattPerMeterKelvin'>WattPerMeterKelvin</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Weber.html'
+                                  title='dimensioned::unit_systems::si::Weber'>Weber</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.WeberMeter.html'
+                                  title='dimensioned::unit_systems::si::WeberMeter'>WeberMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.WeberPerMeter.html'
+                                  title='dimensioned::unit_systems::si::WeberPerMeter'>WeberPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "dimensioned";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

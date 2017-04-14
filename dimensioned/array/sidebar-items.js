@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["AppendFront","Implemented for `GenericArray`, this allows growable `GenericArray`s by appending elements to the front."],["ToGA","Implemented for `TArr` (a type-level array of type numbers), this gives the equivalent `GenericArray`."]]});

@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ucum` mod in crate `dimensioned`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ucum">
+
+    <title>dimensioned::unit_systems::ucum - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <a href='../../../dimensioned/index.html'><img src='https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png' alt='logo' width='100'></a>
+        <p class='location'><a href='../../index.html'>dimensioned</a>::<wbr><a href='../index.html'>unit_systems</a></p><script>window.sidebarCurrent = {name: 'ucum', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../../index.html'>dimensioned</a>::<wbr><a href='../index.html'>unit_systems</a>::<wbr><a class='mod' href=''>ucum</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/dimensioned/home/travis/build/paholg/dimensioned/target/debug/build/dimensioned-4e2d7469da395cfc/out/ucum.rs.html#364-872' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>The Unified Code for Units of Measure (UCUM)</p>
+
+<p>This is an attempt to define a unit system for <a href="http://unitsofmeasure.org/ucum.html">The Unified Code for Units of
+Measure</a>. It does not perfectly match the specification in the
+ways mentioned below.</p>
+
+<hr>
+
+<p>The UCUM specification uses NIST values from 1980 for experimentally determined constants. For some
+of these, we use the 2014 values instead, which can be found
+<a href="http://physics.nist.gov/cuu/Constants/">here</a>.</p>
+
+<hr>
+
+<p>There are a few classifications of units that UCUM defines but that it does not make sense to
+define here, and so we do not. They are as follows:</p>
+
+<ul>
+<li><p>Units defined in terms of characters that we can&#39;t use. For example, the
+symbol for minutes as measure of angle is given by a single quote, &#39;.</p></li>
+<li><p>Units that require conversions that involve more than multiplication. These include some
+temperature units (such as degrees Celcius) and logrithmic units (such as decibels).</p></li>
+</ul>
+
+<hr>
+
+<p>Conflicts:</p>
+
+<p>While the UCUM specification aims to minimize conflicts, there are still some. Units that may
+conflict are indicated by the UCUM spec by square brackets. When there is a conflict, for the unit
+in square brackets, we name it with a trailing underscore. For example, the speed of light
+conflicts with coulomb, so we use <code>C_</code> for the speed of light.</p>
+
+<hr>
+
+<p>A note on derived units:</p>
+
+<p>Mass is involved in a great many units. As the SI unit of mass is the kilogram, there are many
+units defined in terms of tffhe kilogram. To create a derived unit in dimensioned, it must have a
+value of 1.0. Since UCUM uses the gram and not the kilogram as a base unit, that leads to many
+common derived units being off by a factor of 1000. As a result, you will see many derived units
+with prefixes, such as <code>MilliNewton</code> and <code>KiloFarad</code>. The constants for the more common units (<code>N</code>
+and <code>F</code> for the two mentioned) are still defined, but if you need to refer to their types (such as
+in function signatures), this is something to bear in mind.</p>
+
+<hr>
+
+<p>Following, we list all of the <a href="#base-units">base units</a>, <a href="#derived-units">derived units</a>, and
+<a href="#constants">constants</a> that are defined in this unit system.</p>
+
+<h1 id='base-units' class='section-header'><a href='#base-units'>Base Units</a></h1>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Unit</th>
+<th>Print Token</th>
+<th>Dimensionn</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>M</td>
+<td>Meter</td>
+<td>m</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>S</td>
+<td>Second</td>
+<td>s</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>G</td>
+<td>Gram</td>
+<td>g</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>RAD</td>
+<td>Radian</td>
+<td>rad</td>
+<td></td>
+</tr>
+<tr>
+<td>K</td>
+<td>Kelvin</td>
+<td>K</td>
+<td>Temperature</td>
+</tr>
+<tr>
+<td>C</td>
+<td>Coulomb</td>
+<td>C</td>
+<td>Charge</td>
+</tr>
+<tr>
+<td>CD</td>
+<td>Candela</td>
+<td>cd</td>
+<td>LuminousIntensity</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id='derived-units' class='section-header'><a href='#derived-units'>Derived Units</a></h1>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Unit</th>
+<th>Unit Definition</th>
+<th>Dimension</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>SR</td>
+<td>Steradian</td>
+<td>Radian * Radian</td>
+<td></td>
+</tr>
+<tr>
+<td>HZ</td>
+<td>Hertz</td>
+<td>Unitless / Second</td>
+<td>Frequency</td>
+</tr>
+<tr>
+<td>MILLIN</td>
+<td>MilliNewton</td>
+<td>Gram * Meter / Second / Second</td>
+<td>Force</td>
+</tr>
+<tr>
+<td>MILLIPA</td>
+<td>MilliPascal</td>
+<td>MilliNewton / Meter / Meter</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>MILLIJ</td>
+<td>MilliJoule</td>
+<td>MilliNewton * Meter</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>MILLIW</td>
+<td>MilliWatt</td>
+<td>MilliJoule / Second</td>
+<td>Power</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Ampere</td>
+<td>Coulomb / Second</td>
+<td>Current</td>
+</tr>
+<tr>
+<td>MILLIV</td>
+<td>MilliVolt</td>
+<td>MilliJoule / Coulomb</td>
+<td>ElectricPotential</td>
+</tr>
+<tr>
+<td>KILOF</td>
+<td>KiloFarad</td>
+<td>Coulomb / MilliVolt</td>
+<td>Capacitance</td>
+</tr>
+<tr>
+<td>MILLIOHM</td>
+<td>MilliOhm</td>
+<td>MilliVolt / Ampere</td>
+<td>Resistance</td>
+</tr>
+<tr>
+<td>KILOSIE</td>
+<td>KiloSiemens</td>
+<td>Unitless / MilliOhm</td>
+<td>Conductance</td>
+</tr>
+<tr>
+<td>MILLIWB</td>
+<td>MilliWeber</td>
+<td>MilliVolt * Second</td>
+<td>MagneticFlux</td>
+</tr>
+<tr>
+<td>MILLIT</td>
+<td>MilliTesla</td>
+<td>MilliWeber / Meter / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>MILLIH</td>
+<td>MilliHenry</td>
+<td>MilliWeber / Ampere</td>
+<td>Inductance</td>
+</tr>
+<tr>
+<td>LM</td>
+<td>Lumen</td>
+<td>Candela * Steradian</td>
+<td></td>
+</tr>
+<tr>
+<td>LX</td>
+<td>Lux</td>
+<td>Lumen / Meter / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>BQ</td>
+<td>Becquerel</td>
+<td>Unitless / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>GY</td>
+<td>Gray</td>
+<td>MilliJoule / Gram</td>
+<td></td>
+</tr>
+<tr>
+<td>SV</td>
+<td>Sievert</td>
+<td>MilliJoule / Gram</td>
+<td></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>Second2</td>
+<td>Second * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>Second3</td>
+<td>Second2 * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>M2</td>
+<td>Meter2</td>
+<td>Meter * Meter</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>Meter3</td>
+<td>Meter2 * Meter</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>PM</td>
+<td>PerMeter</td>
+<td>Unitless / Meter</td>
+<td>ReciprocalLength</td>
+</tr>
+<tr>
+<td>MPS</td>
+<td>MeterPerSecond</td>
+<td>Meter / Second</td>
+<td>Velocity</td>
+</tr>
+<tr>
+<td>MPS2</td>
+<td>MeterPerSecond2</td>
+<td>Meter / Second2</td>
+<td>Acceleration</td>
+</tr>
+<tr>
+<td>MPS3</td>
+<td>MeterPerSecond3</td>
+<td>Meter / Second3</td>
+<td>Jerk</td>
+</tr>
+<tr>
+<td>M2PS</td>
+<td>Meter2PerSecond</td>
+<td>Meter2 / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>M2PS2</td>
+<td>Meter2PerSecond2</td>
+<td>Meter2 / Second2</td>
+<td></td>
+</tr>
+<tr>
+<td>APM</td>
+<td>AmperePerMeter</td>
+<td>Ampere / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>CPM2</td>
+<td>CandelaPerMeter2</td>
+<td>Candela / Meter2</td>
+<td></td>
+</tr>
+<tr>
+<td>CPG</td>
+<td>CoulombPerGram</td>
+<td>Coulomb / Gram</td>
+<td></td>
+</tr>
+<tr>
+<td>GPM</td>
+<td>GramPerMeter</td>
+<td>Gram / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>GPM4S</td>
+<td>GramPerMeter4Second</td>
+<td>Gram / Meter3 / Meter / Second</td>
+<td></td>
+</tr>
+<tr>
+<td>MILLIJS</td>
+<td>MilliJouleSecond</td>
+<td>MilliJoule * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>MILLIJPK</td>
+<td>MilliJoulePerKelvin</td>
+<td>MilliJoule / Kelvin</td>
+<td></td>
+</tr>
+<tr>
+<td>KILOFPM</td>
+<td>KiloFaradPerMeter</td>
+<td>KiloFarad / Meter</td>
+<td></td>
+</tr>
+<tr>
+<td>MILLINPA2</td>
+<td>MilliNewtonPerAmpere2</td>
+<td>MilliNewton / Ampere / Ampere</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PGS2</td>
+<td>Meter3PerGramSecond2</td>
+<td>Meter3 / Gram / Second2</td>
+<td></td>
+</tr>
+<tr>
+<td>MILLIPS</td>
+<td>MilliPascalSecond</td>
+<td>MilliPascal * Second</td>
+<td></td>
+</tr>
+<tr>
+<td>M3PSG</td>
+<td>Meter3PerSecondGram</td>
+<td>Meter3 / Second / Gram</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h1 id='constants' class='section-header'><a href='#constants'>Constants</a></h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Constant</th>
+<th>Value</th>
+<th>Unit</th>
+<th>Dimension</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Centimeter</td>
+<td>CM</td>
+<td>CENTI * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Astronomic unit</td>
+<td>ASU</td>
+<td>149597.870691e6 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Parsec</td>
+<td>PRS</td>
+<td>3.085678e16 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Light-year</td>
+<td>LY</td>
+<td>C_ * ANN_J</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International inch</td>
+<td>IN_I</td>
+<td>2.54 * CM</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International foot</td>
+<td>FT_I</td>
+<td>12.0 * IN_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International yard</td>
+<td>YD_I</td>
+<td>3.0 * FT_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International mile</td>
+<td>MI_I</td>
+<td>5280.0 * FT_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International fathom</td>
+<td>FTH_I</td>
+<td>6.0 * FT_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International nautical mile</td>
+<td>NMI_I</td>
+<td>1852.0 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International mil</td>
+<td>MIL_I</td>
+<td>1.0e-3 * IN_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>International hand</td>
+<td>HD_I</td>
+<td>4.0 * IN_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US foot</td>
+<td>FT_US</td>
+<td>1200.0 / 3937.0 * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US yard</td>
+<td>YD_US</td>
+<td>3.0 * FT_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US inch</td>
+<td>IN_US</td>
+<td>FT_US / 12.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US rod</td>
+<td>RD_US</td>
+<td>16.5 * FT_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US Gunter&#39;s chain</td>
+<td>CH_US</td>
+<td>4.0 * RD_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US Gunter&#39;s chain</td>
+<td>LK_US</td>
+<td>CH_US / 100.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US Ramden&#39;s chain</td>
+<td>RCH_US</td>
+<td>100.0 * FT_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US Link for Ramden&#39;s chain</td>
+<td>RLK_US</td>
+<td>RCH_US / 100.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US fathom</td>
+<td>FTH_US</td>
+<td>6.0 * FT_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US furlong</td>
+<td>FUR_US</td>
+<td>40.0 * RD_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US mile</td>
+<td>MI_US</td>
+<td>8.0 * FUR_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>US mil</td>
+<td>MIL_US</td>
+<td>1.0e-3 * IN_US</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British inch</td>
+<td>IN_BR</td>
+<td>2.539998 * CM</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British foot</td>
+<td>FT_BR</td>
+<td>12.0 * IN_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British rod</td>
+<td>RD_BR</td>
+<td>16.5 * FT_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British Gunter&#39;s chain</td>
+<td>CH_BR</td>
+<td>4.0 * RD_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British link for Gunter&#39;s chain</td>
+<td>LK_BR</td>
+<td>CH_BR / 100.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British fathom</td>
+<td>FTH_BR</td>
+<td>6.0 * FT_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British pace</td>
+<td>PC_BR</td>
+<td>2.5 * FT_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British yard</td>
+<td>YD_BR</td>
+<td>3.0 * FT_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British mile</td>
+<td>MI_BR</td>
+<td>5280.0 * FT_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>British nautical mile</td>
+<td>NMI_BR</td>
+<td>6080.0 * FT_BR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Line</td>
+<td>LNE</td>
+<td>IN_I / 12.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Point</td>
+<td>PNT</td>
+<td>LNE / 6.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Pica</td>
+<td>PCA</td>
+<td>12.0 * PNT</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Printer&#39;s point</td>
+<td>PNT_PR</td>
+<td>0.013837 * IN_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Printer&#39;s pica</td>
+<td>PCA_PR</td>
+<td>12.0 * PNT_PR</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Pied</td>
+<td>PIED</td>
+<td>32.48 * CM</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Pounce</td>
+<td>POUNCE</td>
+<td>PIED / 12.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Ligne</td>
+<td>LIGNE</td>
+<td>POUNCE / 12.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Didot</td>
+<td>DIDOT</td>
+<td>LIGNE / 6.0</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Cicero</td>
+<td>CICERO</td>
+<td>12.0 * DIDOT</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Charrière</td>
+<td>CH</td>
+<td>1.0 / 3.0 * MILLI * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Ångström</td>
+<td>AO</td>
+<td>0.1 * NANO * M</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td>Smoot</td>
+<td>SMOOT</td>
+<td>67.0 * IN_I</td>
+<td>Meter</td>
+<td>Length</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Minute</td>
+<td>MIN</td>
+<td>60.0 * S</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Hour</td>
+<td>HR</td>
+<td>60.0 * MIN</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Day</td>
+<td>D</td>
+<td>24.0 * HR</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Tropical year</td>
+<td>ANN_T</td>
+<td>365.24219 * D</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Mean Julian year</td>
+<td>ANN_J</td>
+<td>365.25 * D</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Mean Gregorian year</td>
+<td>ANN_G</td>
+<td>365.2425 * D</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>year</td>
+<td>ANN</td>
+<td>ANN_J</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>week</td>
+<td>WK</td>
+<td>7.0 * D</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Synodal month</td>
+<td>MO_S</td>
+<td>29.53059 * D</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Mean Julian month</td>
+<td>MO_J</td>
+<td>ANN_J / 12.0</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Mean Gregorian month</td>
+<td>MO_G</td>
+<td>ANN_G / 12.0</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Month</td>
+<td>MO</td>
+<td>MO_J</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td>Svedberg unit</td>
+<td>S_</td>
+<td>1.0e-13 * S</td>
+<td>Second</td>
+<td>Time</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Kilogram</td>
+<td>KG</td>
+<td>KILO * G</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Tonne</td>
+<td>TNE</td>
+<td>1.0e3 * KG</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Unified atomic mass unit</td>
+<td>AMU</td>
+<td>1.6605402e-24 * G</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Electron mass</td>
+<td>M_E</td>
+<td>9.10938356e-31 * KG</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Proton mass</td>
+<td>M_P</td>
+<td>1.6726231e-24 * G</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Grain</td>
+<td>GR</td>
+<td>64.79891 * MILLI * G</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois pound</td>
+<td>LB_AV</td>
+<td>7000.0 * GR</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois ounce</td>
+<td>OZ_AV</td>
+<td>LB_AV / 16.0</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois dram</td>
+<td>DR_AV</td>
+<td>OZ_AV / 16.0</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois short hundredweight</td>
+<td>SCWT_AV</td>
+<td>100.0 * LB_AV</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois long hundredweight</td>
+<td>LCWT_AV</td>
+<td>112.0 * LB_AV</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois short ton</td>
+<td>STON_AV</td>
+<td>20.0 * SCWT_AV</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois long ton</td>
+<td>LTON_AV</td>
+<td>20.0 * LCWT_AV</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Avoirdupois stone</td>
+<td>STONE_AV</td>
+<td>14.0 * LB_AV</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Troy pennyweight</td>
+<td>PWT_TR</td>
+<td>24.0 * GR</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Troy ounce</td>
+<td>OZ_TR</td>
+<td>20.0 * PWT_TR</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Troy pound</td>
+<td>LB_TR</td>
+<td>12.0 * OZ_TR</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Apothecary scruple</td>
+<td>SC_AP</td>
+<td>20.0 * GR</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Apothecary dram</td>
+<td>DR_AP</td>
+<td>3.0 * SC_AP</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Apothecary ounce</td>
+<td>OZ_AP</td>
+<td>8.0 * DR_AP</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Apothecary pound</td>
+<td>LB_AP</td>
+<td>12.0 * OZ_AP</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Apothecary ounce</td>
+<td>OZ_M</td>
+<td>28.0 * G</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td>Metric carat</td>
+<td>CAR_M</td>
+<td>0.2 * G</td>
+<td>Gram</td>
+<td>Mass</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Gon, grade</td>
+<td>GON</td>
+<td>0.9 * DEG</td>
+<td>Radian</td>
+<td></td>
+</tr>
+<tr>
+<td>Degree</td>
+<td>DEG</td>
+<td>2.0 * consts::PI / 360.0 * RAD</td>
+<td>Radian</td>
+<td></td>
+</tr>
+<tr>
+<td>Circle</td>
+<td>CIRC</td>
+<td>2.0 * consts::PI * RAD</td>
+<td>Radian</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Degree Rankine</td>
+<td>DEGR</td>
+<td>5.0 / 9.0 * K</td>
+<td>Kelvin</td>
+<td>Temperature</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Elementary charge</td>
+<td>E</td>
+<td>1.6021766208e-19 * C</td>
+<td>Coulomb</td>
+<td>Charge</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Sphere</td>
+<td>SPH</td>
+<td>4.0 * consts::PI * SR</td>
+<td>Steradian</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Katal</td>
+<td>KAT</td>
+<td>MOL / S</td>
+<td>Hertz</td>
+<td>Frequency</td>
+</tr>
+<tr>
+<td>Unit</td>
+<td>U</td>
+<td>MICRO * MOL / MIN</td>
+<td>Hertz</td>
+<td>Frequency</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Newton</td>
+<td>N</td>
+<td>KILO * MILLIN</td>
+<td>MilliNewton</td>
+<td>Force</td>
+</tr>
+<tr>
+<td>Gram force</td>
+<td>GF</td>
+<td>G * G_</td>
+<td>MilliNewton</td>
+<td>Force</td>
+</tr>
+<tr>
+<td>Pound force</td>
+<td>LBF_AV</td>
+<td>LB_AV * G_</td>
+<td>MilliNewton</td>
+<td>Force</td>
+</tr>
+<tr>
+<td>Dyne</td>
+<td>DYN</td>
+<td>G * CM / S2</td>
+<td>MilliNewton</td>
+<td>Force</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Pascal</td>
+<td>PA</td>
+<td>KILO * MILLIPA</td>
+<td>MilliPascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Bar</td>
+<td>BAR</td>
+<td>1.0e5 * PA</td>
+<td>MilliPascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Standard atmosphere</td>
+<td>ATM</td>
+<td>101325.0 * PA</td>
+<td>MilliPascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Meter of water column</td>
+<td>MH20</td>
+<td>9.80665 * KILO * PA</td>
+<td>MilliPascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Meter of mercury column</td>
+<td>MHG</td>
+<td>133.3220 * KILO * PA</td>
+<td>MilliPascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Technical atmosphere</td>
+<td>ATT</td>
+<td>KILO * GF / CM / CM</td>
+<td>MilliPascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td>Pound per square inch</td>
+<td>PSI</td>
+<td>LBF_AV / IN_I / IN_I</td>
+<td>MilliPascal</td>
+<td>Pressure</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Joule</td>
+<td>J</td>
+<td>KILO * MILLIJ</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Electronvolt</td>
+<td>EV</td>
+<td>E * V</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Erg</td>
+<td>ERG</td>
+<td>DYN * CM</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Calorie at 15 °C</td>
+<td>CAL_15</td>
+<td>4.18580 * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Calorie at 20 °C</td>
+<td>CAL_20</td>
+<td>4.18190 * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Mean calorie</td>
+<td>CAL_M</td>
+<td>4.19002 * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>International table calorie</td>
+<td>CAL_IT</td>
+<td>4.1868 * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Thermochemical calorie</td>
+<td>CAL_TH</td>
+<td>4.184 * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Calorie</td>
+<td>CAL</td>
+<td>CAL_TH</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Nutrition label calorie</td>
+<td>CAL_</td>
+<td>KILO * CAL</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>British thermal unit at 39 °F</td>
+<td>BTU_39</td>
+<td>1.05967 * KILO * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>British thermal unit at 59 °F</td>
+<td>BTU_59</td>
+<td>1.05480 * KILO * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>British thermal unit at 60 °F</td>
+<td>BTU_60</td>
+<td>1.05468 * KILO * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Mean British thermal unit</td>
+<td>BTU_M</td>
+<td>1.05587 * KILO * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>International table British thermal unit</td>
+<td>BTU_IT</td>
+<td>1.05505585262 * KILO * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>Thermochemical British thermal unit</td>
+<td>BTU_TH</td>
+<td>1.054350 * KILO * J</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td>British thermal unit</td>
+<td>BTU</td>
+<td>BTU_TH</td>
+<td>MilliJoule</td>
+<td>Energy</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Watt</td>
+<td>W</td>
+<td>KILO * MILLIW</td>
+<td>MilliWatt</td>
+<td>Power</td>
+</tr>
+<tr>
+<td>Horsepower</td>
+<td>HP</td>
+<td>550.0 * FT_I * LBF_AV / S</td>
+<td>MilliWatt</td>
+<td>Power</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Biot</td>
+<td>BI</td>
+<td>10.0 * A</td>
+<td>Ampere</td>
+<td>Current</td>
+</tr>
+<tr>
+<td>Gilbert</td>
+<td>GB</td>
+<td>OE * CM</td>
+<td>Ampere</td>
+<td>Current</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Volt</td>
+<td>V</td>
+<td>KILO * MILLIV</td>
+<td>MilliVolt</td>
+<td>ElectricPotential</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Farad</td>
+<td>F</td>
+<td>MILLI * KILOF</td>
+<td>KiloFarad</td>
+<td>Capacitance</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Ohm</td>
+<td>OHM</td>
+<td>KILO * MILLIOHM</td>
+<td>MilliOhm</td>
+<td>Resistance</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Siemens</td>
+<td>SIE</td>
+<td>MILLI * KILOSIE</td>
+<td>KiloSiemens</td>
+<td>Conductance</td>
+</tr>
+<tr>
+<td>Mho</td>
+<td>MHO</td>
+<td>MILLI * SIE</td>
+<td>KiloSiemens</td>
+<td>Conductance</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Weber</td>
+<td>WB</td>
+<td>KILO * MILLIWB</td>
+<td>MilliWeber</td>
+<td>MagneticFlux</td>
+</tr>
+<tr>
+<td>Maxwell</td>
+<td>MX</td>
+<td>1.0e-8 * WB</td>
+<td>MilliWeber</td>
+<td>MagneticFlux</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Tesla</td>
+<td>T</td>
+<td>KILO * MILLIT</td>
+<td>MilliTesla</td>
+<td></td>
+</tr>
+<tr>
+<td>Gauss</td>
+<td>GS</td>
+<td>1.0e-4 * T</td>
+<td>MilliTesla</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Henry</td>
+<td>H</td>
+<td>KILO * MILLIH</td>
+<td>MilliHenry</td>
+<td>Inductance</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Phot</td>
+<td>PHT</td>
+<td>1.0e-4 * LX</td>
+<td>Lux</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Curie</td>
+<td>CI</td>
+<td>3.7e10 * BQ</td>
+<td>Becquerel</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Are</td>
+<td>AR</td>
+<td>100.0 * M2</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>International square inch</td>
+<td>SIN_I</td>
+<td>IN_I * IN_I</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>International square foot</td>
+<td>SFT_I</td>
+<td>FT_I * FT_I</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>International square yard</td>
+<td>SYD_I</td>
+<td>YD_I * YD_I</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>International circular mil</td>
+<td>CML_I</td>
+<td>consts::PI / 4.0 * MIL_I * MIL_I</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>US acre</td>
+<td>ACR_US</td>
+<td>160.0 * RD_US * RD_US</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>US square rod</td>
+<td>SRD_US</td>
+<td>RD_US * RD_US</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>US square mile</td>
+<td>SMI_US</td>
+<td>MI_US * MI_US</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>Section</td>
+<td>SCT</td>
+<td>MI_US * MI_US</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>Township</td>
+<td>TWP</td>
+<td>36.0 * SCT</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>British acre</td>
+<td>ACR_BR</td>
+<td>4840.0 * YD_BR * YD_BR</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td>Barn</td>
+<td>BRN</td>
+<td>100.0 * FEMTO * M * FEMTO * M</td>
+<td>Meter2</td>
+<td>Area</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Liter</td>
+<td>L</td>
+<td>0.1 * 0.1 * 0.1 * M3</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>International cubic inch</td>
+<td>CIN_I</td>
+<td>IN_I * IN_I * IN_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>International cubic foot</td>
+<td>CFT_I</td>
+<td>FT_I * FT_I * FT_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>International cubic yard</td>
+<td>CYD_I</td>
+<td>YD_I * YD_I * YD_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>International board foot</td>
+<td>BF_I</td>
+<td>144.0 * CIN_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>International cord</td>
+<td>CR_I</td>
+<td>128.0 * CFT_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Queen Anne&#39;s wine gallon</td>
+<td>GAL_US</td>
+<td>231.0 * IN_I * IN_I * IN_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US barrel</td>
+<td>BBL_US</td>
+<td>42.0 * GAL_US</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US quart</td>
+<td>QT_US</td>
+<td>GAL_US / 4.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US pint</td>
+<td>PT_US</td>
+<td>QT_US / 2.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US gill</td>
+<td>GIL_US</td>
+<td>PT_US / 4.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US fluid Ounce</td>
+<td>FOZ_US</td>
+<td>GIL_US / 4.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US fluid Dram</td>
+<td>FDR_US</td>
+<td>FOZ_US / 8.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US minim</td>
+<td>MIN_US</td>
+<td>FDR_US / 60.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US cord</td>
+<td>CRD_US</td>
+<td>CR_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US bushel</td>
+<td>BU_US</td>
+<td>2150.42 * IN_I * IN_I * IN_I</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Historical winchester gallon</td>
+<td>GAL_WI</td>
+<td>BU_US / 8.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US peck</td>
+<td>PK_US</td>
+<td>BU_US / 4.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US dry quart</td>
+<td>DQT_US</td>
+<td>PK_US / 8.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US dry pint</td>
+<td>DPT_US</td>
+<td>DQT_US / 2.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US tablespoon</td>
+<td>TBS_US</td>
+<td>FOZ_US / 2.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US teaspoon</td>
+<td>TSP_US</td>
+<td>TBS_US / 3.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>US cup</td>
+<td>CUP_US</td>
+<td>16.0 * TBS_US</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Metric fluid ounce</td>
+<td>FOZ_M</td>
+<td>30.0 * MILLI * L</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Metric cup</td>
+<td>CUP_M</td>
+<td>240.0 * MILLI * L</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Metric teaspoon</td>
+<td>TSP_M</td>
+<td>5.0 * MILLI * L</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Metric tablespoon</td>
+<td>TBS_M</td>
+<td>15.0 * MILLI * L</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British gallon</td>
+<td>GAL_BR</td>
+<td>4.54609 * L</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British peck</td>
+<td>PK_BR</td>
+<td>2.0 * GAL_BR</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British bushel</td>
+<td>BU_BR</td>
+<td>4.0 * PK_BR</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British quart</td>
+<td>QT_BR</td>
+<td>GAL_BR / 4.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British pint</td>
+<td>PT_BR</td>
+<td>QT_BR / 2.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British gill</td>
+<td>GIL_BR</td>
+<td>PT_BR / 4.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British fluid ounce</td>
+<td>FOZ_BR</td>
+<td>GIL_BR / 5.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British fluid dram</td>
+<td>FDR_BR</td>
+<td>FOZ_BR / 8.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>British minim</td>
+<td>MIN_BR</td>
+<td>FDR_BR / 60.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Drop</td>
+<td>DRP</td>
+<td>MILLI * L / 20.0</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td>Stere</td>
+<td>STR</td>
+<td>1.0 * M3</td>
+<td>Meter3</td>
+<td>Volume</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Kayser</td>
+<td>KY</td>
+<td>1.0 / CM</td>
+<td>PerMeter</td>
+<td>ReciprocalLength</td>
+</tr>
+<tr>
+<td>Diopter</td>
+<td>DIOP</td>
+<td>1.0 / M</td>
+<td>PerMeter</td>
+<td>ReciprocalLength</td>
+</tr>
+<tr>
+<td>Mesh</td>
+<td>MESH_I</td>
+<td>1.0 / IN_I</td>
+<td>PerMeter</td>
+<td>ReciprocalLength</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Speed of light in a vacuum</td>
+<td>C_</td>
+<td>299792458.0 * MPS</td>
+<td>MeterPerSecond</td>
+<td>Velocity</td>
+</tr>
+<tr>
+<td>International knot</td>
+<td>KN_I</td>
+<td>NMI_I / HR</td>
+<td>MeterPerSecond</td>
+<td>Velocity</td>
+</tr>
+<tr>
+<td>British knot</td>
+<td>KN_BR</td>
+<td>NMI_BR / HR</td>
+<td>MeterPerSecond</td>
+<td>Velocity</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Standard acceleration of free fall</td>
+<td>G_</td>
+<td>9.80665 * M / S2</td>
+<td>MeterPerSecond2</td>
+<td>Acceleration</td>
+</tr>
+<tr>
+<td>Gal</td>
+<td>GL</td>
+<td>CM / S2</td>
+<td>MeterPerSecond2</td>
+<td>Acceleration</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Stokes</td>
+<td>ST</td>
+<td>CM * CM / S</td>
+<td>Meter2PerSecond</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Radiation absorbed dose</td>
+<td>RAD_</td>
+<td>100.0 * ERG / G</td>
+<td>Meter2PerSecond2</td>
+<td></td>
+</tr>
+<tr>
+<td>Radiation equivalent man</td>
+<td>REM_</td>
+<td>RAD_</td>
+<td>Meter2PerSecond2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Oersted</td>
+<td>OE</td>
+<td>250.0 / consts::PI * A / M</td>
+<td>AmperePerMeter</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Stilb</td>
+<td>SB</td>
+<td>CD / CM / CM</td>
+<td>CandelaPerMeter2</td>
+<td></td>
+</tr>
+<tr>
+<td>Lambert</td>
+<td>LMB</td>
+<td>SB / consts::PI</td>
+<td>CandelaPerMeter2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Roentgen</td>
+<td>ROE</td>
+<td>2.58e-4 * C / KG</td>
+<td>CoulombPerGram</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Tex</td>
+<td>TEX</td>
+<td>1.0 * G / (KILO * M)</td>
+<td>GramPerMeter</td>
+<td></td>
+</tr>
+<tr>
+<td>Denier</td>
+<td>DEN</td>
+<td>TEX / 9.0</td>
+<td>GramPerMeter</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Peripheral vascular resistance unit</td>
+<td>PRU</td>
+<td>MHG * S / L</td>
+<td>GramPerMeter4Second</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Planck constant</td>
+<td>H_</td>
+<td>6.6260755e-34 * J * S</td>
+<td>MilliJouleSecond</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Boltzmann constant</td>
+<td>K_</td>
+<td>1.380658e-23 * J / K</td>
+<td>MilliJoulePerKelvin</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Permittivity of vacuum</td>
+<td>EPS_0</td>
+<td>8.854187817e-12 * F / M</td>
+<td>KiloFaradPerMeter</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Permeability of vacuum</td>
+<td>MU_0</td>
+<td>4.0e-7 * consts::PI * N / A / A</td>
+<td>MilliNewtonPerAmpere2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Newtonian constant of gravitation</td>
+<td>GC</td>
+<td>6.67259e-11 * M3 / KG / S2</td>
+<td>Meter3PerGramSecond2</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Poise</td>
+<td>P</td>
+<td>DYN * S / CM / CM</td>
+<td>MilliPascalSecond</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Metabolic equivalent</td>
+<td>MET</td>
+<td>3.5 * MILLI * L / MIN / KG</td>
+<td>Meter3PerSecondGram</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use self::<a class='mod' href='../../../dimensioned/unit_systems/ucum/f64consts/index.html' title='dimensioned::unit_systems::ucum::f64consts'>f64consts</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='f32consts/index.html'
+                                  title='dimensioned::unit_systems::ucum::f32consts'>f32consts</a></td>
+                           <td class='docblock-short'>
+                                <p>Constants defined for this system</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='f64consts/index.html'
+                                  title='dimensioned::unit_systems::ucum::f64consts'>f64consts</a></td>
+                           <td class='docblock-short'>
+                                <p>Constants defined for this system</p>
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.UCUM.html'
+                                  title='dimensioned::unit_systems::ucum::UCUM'>UCUM</a></td>
+                           <td class='docblock-short'>
+                                <p>The struct for this unit system</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Ampere.html'
+                                  title='dimensioned::unit_systems::ucum::Ampere'>Ampere</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.AmperePerMeter.html'
+                                  title='dimensioned::unit_systems::ucum::AmperePerMeter'>AmperePerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Becquerel.html'
+                                  title='dimensioned::unit_systems::ucum::Becquerel'>Becquerel</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Candela.html'
+                                  title='dimensioned::unit_systems::ucum::Candela'>Candela</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CandelaPerMeter2.html'
+                                  title='dimensioned::unit_systems::ucum::CandelaPerMeter2'>CandelaPerMeter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Coulomb.html'
+                                  title='dimensioned::unit_systems::ucum::Coulomb'>Coulomb</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.CoulombPerGram.html'
+                                  title='dimensioned::unit_systems::ucum::CoulombPerGram'>CoulombPerGram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Gram.html'
+                                  title='dimensioned::unit_systems::ucum::Gram'>Gram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.GramPerMeter.html'
+                                  title='dimensioned::unit_systems::ucum::GramPerMeter'>GramPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.GramPerMeter4Second.html'
+                                  title='dimensioned::unit_systems::ucum::GramPerMeter4Second'>GramPerMeter4Second</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Gray.html'
+                                  title='dimensioned::unit_systems::ucum::Gray'>Gray</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Hertz.html'
+                                  title='dimensioned::unit_systems::ucum::Hertz'>Hertz</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Kelvin.html'
+                                  title='dimensioned::unit_systems::ucum::Kelvin'>Kelvin</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KiloFarad.html'
+                                  title='dimensioned::unit_systems::ucum::KiloFarad'>KiloFarad</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KiloFaradPerMeter.html'
+                                  title='dimensioned::unit_systems::ucum::KiloFaradPerMeter'>KiloFaradPerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.KiloSiemens.html'
+                                  title='dimensioned::unit_systems::ucum::KiloSiemens'>KiloSiemens</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Lumen.html'
+                                  title='dimensioned::unit_systems::ucum::Lumen'>Lumen</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Lux.html'
+                                  title='dimensioned::unit_systems::ucum::Lux'>Lux</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter.html'
+                                  title='dimensioned::unit_systems::ucum::Meter'>Meter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2.html'
+                                  title='dimensioned::unit_systems::ucum::Meter2'>Meter2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerSecond.html'
+                                  title='dimensioned::unit_systems::ucum::Meter2PerSecond'>Meter2PerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter2PerSecond2.html'
+                                  title='dimensioned::unit_systems::ucum::Meter2PerSecond2'>Meter2PerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3.html'
+                                  title='dimensioned::unit_systems::ucum::Meter3'>Meter3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerGramSecond2.html'
+                                  title='dimensioned::unit_systems::ucum::Meter3PerGramSecond2'>Meter3PerGramSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Meter3PerSecondGram.html'
+                                  title='dimensioned::unit_systems::ucum::Meter3PerSecondGram'>Meter3PerSecondGram</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerSecond.html'
+                                  title='dimensioned::unit_systems::ucum::MeterPerSecond'>MeterPerSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerSecond2.html'
+                                  title='dimensioned::unit_systems::ucum::MeterPerSecond2'>MeterPerSecond2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MeterPerSecond3.html'
+                                  title='dimensioned::unit_systems::ucum::MeterPerSecond3'>MeterPerSecond3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliHenry.html'
+                                  title='dimensioned::unit_systems::ucum::MilliHenry'>MilliHenry</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliJoule.html'
+                                  title='dimensioned::unit_systems::ucum::MilliJoule'>MilliJoule</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliJoulePerKelvin.html'
+                                  title='dimensioned::unit_systems::ucum::MilliJoulePerKelvin'>MilliJoulePerKelvin</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliJouleSecond.html'
+                                  title='dimensioned::unit_systems::ucum::MilliJouleSecond'>MilliJouleSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliNewton.html'
+                                  title='dimensioned::unit_systems::ucum::MilliNewton'>MilliNewton</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliNewtonPerAmpere2.html'
+                                  title='dimensioned::unit_systems::ucum::MilliNewtonPerAmpere2'>MilliNewtonPerAmpere2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliOhm.html'
+                                  title='dimensioned::unit_systems::ucum::MilliOhm'>MilliOhm</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliPascal.html'
+                                  title='dimensioned::unit_systems::ucum::MilliPascal'>MilliPascal</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliPascalSecond.html'
+                                  title='dimensioned::unit_systems::ucum::MilliPascalSecond'>MilliPascalSecond</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliTesla.html'
+                                  title='dimensioned::unit_systems::ucum::MilliTesla'>MilliTesla</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliVolt.html'
+                                  title='dimensioned::unit_systems::ucum::MilliVolt'>MilliVolt</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliWatt.html'
+                                  title='dimensioned::unit_systems::ucum::MilliWatt'>MilliWatt</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.MilliWeber.html'
+                                  title='dimensioned::unit_systems::ucum::MilliWeber'>MilliWeber</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.PerMeter.html'
+                                  title='dimensioned::unit_systems::ucum::PerMeter'>PerMeter</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Radian.html'
+                                  title='dimensioned::unit_systems::ucum::Radian'>Radian</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second.html'
+                                  title='dimensioned::unit_systems::ucum::Second'>Second</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second2.html'
+                                  title='dimensioned::unit_systems::ucum::Second2'>Second2</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Second3.html'
+                                  title='dimensioned::unit_systems::ucum::Second3'>Second3</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Sievert.html'
+                                  title='dimensioned::unit_systems::ucum::Sievert'>Sievert</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Steradian.html'
+                                  title='dimensioned::unit_systems::ucum::Steradian'>Steradian</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.Unitless.html'
+                                  title='dimensioned::unit_systems::ucum::Unitless'>Unitless</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "dimensioned";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

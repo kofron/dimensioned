@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `make_units` macro in crate `dimensioned`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, make_units">
+
+    <title>dimensioned::make_units - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <a href='../dimensioned/index.html'><img src='https://raw.githubusercontent.com/paholg/dimensioned/master/favicon.png' alt='logo' width='100'></a>
+        <p class='location'><a href='index.html'>dimensioned</a></p><script>window.sidebarCurrent = {name: 'make_units', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content macro">
+<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>dimensioned</a>::<wbr><a class='macro' href=''>make_units</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/dimensioned/make_units.rs.html#159-466' title='goto source code'>[src]</a></span></h1>
+<pre class='rust macro'>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>make_units</span> {
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>System</span>:<span class='ident'>ident</span>;
+     <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>one</span>:<span class='ident'>ident</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>Unitless</span>:<span class='ident'>ident</span>;
+     <span class='ident'>base</span> {
+         $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>base</span>:<span class='ident'>ident</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>Unit</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>print_as</span>:<span class='ident'>expr</span> $(, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>base_dim</span>:<span class='ident'>ident</span>)<span class='kw-2'>*</span>;)<span class='op'>+</span>
+     }
+     <span class='ident'>derived</span> {
+         $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>derived_const</span>:<span class='ident'>ident</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>Derived</span>:<span class='ident'>ident</span> <span class='op'>=</span> ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>derived_rhs</span>:<span class='ident'>tt</span>)<span class='op'>+</span>) $(, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>derived_dim</span>:<span class='ident'>ident</span>)<span class='kw-2'>*</span>;)<span class='op'>*</span>
+     }
+     <span class='ident'>constants</span> {
+         $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>constant</span>:<span class='ident'>ident</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ConstantUnit</span>:<span class='ident'>ident</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>constant_value</span>:<span class='ident'>expr</span>;)<span class='op'>*</span>
+     }
+     <span class='ident'>fmt</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>to_fmt</span>:<span class='ident'>ident</span>;
+    ) <span class='op'>=&gt;</span> { ... };
+}</pre>
+<div class='docblock'><p>Create a new unit system</p>
+
+<p>This macro is the heart of this library and is used to create the unit systems with which it
+ships.</p>
+
+<p>If you find yourself using this macro, please think about whether the unit system you are creating
+would be useful to others; if so, submit an issue to get it added to dimensioned.</p>
+
+<p>Rather than try to parse the definition above, we will show an example of calling it, and then
+walk through it line by line.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>dimensioned</span> <span class='kw'>as</span> <span class='ident'>dim</span>;
+
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>ms</span> {
+    <span class='macro'>make_units</span><span class='macro'>!</span> {
+        <span class='ident'>MS</span>;
+        <span class='ident'>ONE</span>: <span class='ident'>Unitless</span>;
+
+        <span class='ident'>base</span> {
+            <span class='ident'>M</span>: <span class='ident'>Meter</span>, <span class='string'>&quot;m&quot;</span>, <span class='ident'>Length</span>;
+            <span class='ident'>S</span>: <span class='ident'>Second</span>, <span class='string'>&quot;s&quot;</span>, <span class='ident'>Time</span>;
+        }
+
+        <span class='ident'>derived</span> {
+            <span class='ident'>MPS</span>: <span class='ident'>MeterPerSecond</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Velocity</span>;
+            <span class='ident'>HZ</span>: <span class='ident'>Hertz</span> <span class='op'>=</span> (<span class='ident'>Unitless</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Frequency</span>;
+
+            <span class='ident'>M3</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>*</span> <span class='ident'>Meter</span> <span class='op'>*</span> <span class='ident'>Meter</span>), <span class='ident'>Volume</span>;
+            <span class='ident'>M5</span>: <span class='ident'>Meter5</span> <span class='op'>=</span> (<span class='ident'>Meter3</span> <span class='op'>*</span> <span class='ident'>Meter</span> <span class='op'>*</span> <span class='ident'>Meter</span>);
+        }
+
+        <span class='ident'>constants</span> {
+            <span class='ident'>FT</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>0.3048</span>;
+            <span class='ident'>CM</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>CENTI</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+
+            <span class='ident'>MIN</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>60.0</span>;
+            <span class='ident'>HR</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>60.0</span> <span class='op'>*</span> <span class='ident'>MIN</span>.<span class='ident'>value_unsafe</span>;
+
+            <span class='ident'>PI</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='ident'>consts</span>::<span class='ident'>PI</span>;
+        }
+
+        <span class='ident'>fmt</span> <span class='op'>=</span> <span class='bool-val'>true</span>;
+    }
+    <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>f64consts</span>::<span class='kw-2'>*</span>;
+}</pre>
+
+<p>Okay, now let&#39;s walk through it.</p>
+
+<p>The macro performs some imports and defines quite a few things, so it&#39;s strongly recommended to put it
+in its own module.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>ms</span> {</pre>
+
+<p>The first line after calling the macro is just the name we want to give the unit system followed
+by a semi-colon. This will be the name of the only type we define; all other type definitions are
+aliases to this type with different parameters.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='macro'>make_units</span><span class='macro'>!</span> {
+        <span class='ident'>MS</span>;</pre>
+
+<p>The next line is the name of the constant and type alias we want for a dimensionless quantity in
+your system. That is, when all units have power of 0.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='ident'>ONE</span>: <span class='ident'>Unitless</span>;</pre>
+
+<p>In the <code>base</code> block, we define the base units for our system. Each line is of the format <code>CONST: Type, &quot;token&quot;, Dimension;</code> where <code>CONST</code> is the constant we create, <code>Type</code> is the type alias that
+we&#39;ll make for this unit, <code>token</code> is what will show up when we print it, and <code>Dimension</code> is
+optional. If present, the macro will implement said dimension from the <code>dimensions</code> module for this unit.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='ident'>base</span> {
+            <span class='ident'>M</span>: <span class='ident'>Meter</span>, <span class='string'>&quot;m&quot;</span>, <span class='ident'>Length</span>;
+            <span class='ident'>S</span>: <span class='ident'>Second</span>, <span class='string'>&quot;s&quot;</span>, <span class='ident'>Time</span>;
+        }</pre>
+
+<p>In the <code>derived</code> block, we can make derived units from our base units. The beginning is similar; we
+have <code>CONST: Type</code>. After the equal signs, we have a formula to define this unit. The parentheses
+are required, and the only things that can be inside them are the names of other units, and the *
+and / operators. Hopefully, this part of the macro will be made more flexibile in the
+future. Finally, we again end with an optional dimension. Note that there is none present for the
+<code>M5</code> line.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='ident'>derived</span> {
+            <span class='ident'>MPS</span>: <span class='ident'>MeterPerSecond</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Velocity</span>;
+            <span class='ident'>HZ</span>: <span class='ident'>Hertz</span> <span class='op'>=</span> (<span class='ident'>Unitless</span> <span class='op'>/</span> <span class='ident'>Second</span>), <span class='ident'>Frequency</span>;
+
+            <span class='ident'>M3</span>: <span class='ident'>Meter3</span> <span class='op'>=</span> (<span class='ident'>Meter</span> <span class='op'>*</span> <span class='ident'>Meter</span> <span class='op'>*</span> <span class='ident'>Meter</span>), <span class='ident'>Volume</span>;
+            <span class='ident'>M5</span>: <span class='ident'>Meter5</span> <span class='op'>=</span> (<span class='ident'>Meter3</span> <span class='op'>*</span> <span class='ident'>Meter</span> <span class='op'>*</span> <span class='ident'>Meter</span>);
+        }
+</pre>
+
+<p>In the <code>constants</code> block, we can define constants of whatever values we wish. Note that the
+constants in the <code>base</code> and <code>derived</code> blocks are always created with a value of 1.0.</p>
+
+<p>All constants are created in both <code>f32</code> and <code>f64</code> flavors, in the submodules <code>f32consts</code> and
+<code>f64consts</code>, respectively.</p>
+
+<p>In these submodules, the consts from the respective version of <code>f32prefixes</code> or <code>f64prefixes</code> are in
+scope, hence the use of <code>CENTI</code> in the <code>CM</code> definition.</p>
+
+<p>In addition, the the respective version of <code>core::f32::consts</code> or <code>core::f64::consts</code> is in scope,
+which allows the use of <code>consts::PI</code> in the `PI definition.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='ident'>constants</span> {
+            <span class='ident'>FT</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='number'>0.3048</span>;
+            <span class='ident'>CM</span>: <span class='ident'>Meter</span> <span class='op'>=</span> <span class='ident'>CENTI</span> <span class='op'>*</span> <span class='ident'>M</span>.<span class='ident'>value_unsafe</span>;
+
+            <span class='ident'>MIN</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>60.0</span>;
+            <span class='ident'>HR</span>: <span class='ident'>Second</span> <span class='op'>=</span> <span class='number'>60.0</span> <span class='op'>*</span> <span class='ident'>MIN</span>.<span class='ident'>value_unsafe</span>;
+
+            <span class='ident'>PI</span>: <span class='ident'>Unitless</span> <span class='op'>=</span> <span class='ident'>consts</span>::<span class='ident'>PI</span>;
+        }</pre>
+
+<p>Finally, we have the <code>fmt</code> line. This line can either be <code>fmt = true;</code> or <code>fmt = false;</code>. In either
+case, the trait <code>core::fmt::Debug</code> is implemented for your unit system, but all of the other <code>fmt</code>
+traits are implemented only if this is true. Setting it to false allows you to have custom printing for your system.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='ident'>fmt</span> <span class='op'>=</span> <span class='bool-val'>true</span>;
+    }</pre>
+
+<p>This line isn&#39;t part of the macro, but I wanted to include it as it is in all of the unit systems
+defined in dimensioned. It lets us use the <code>f64</code> flavor of constants much easier. E.g. we can now
+type <code>ms::M</code> instead of <code>ms::f64consts::M</code>.</p>
+
+<pre><code class="language-igore">    pub use self::f64consts::*;
+}
+</code></pre>
+
+<p>And that&#39;s it! The macro may seem complicated at first, but if you end up using it, I hope that it
+starts seeming intuitive fairly quickly.</p>
+
+<hr>
+
+<p>In addition to creating a type, type aliases, and constants, this macro implements many traits for
+your unit system, including (but not limited to) the traits in the <code>traits</code> module and arithmetic operations.</p>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "dimensioned";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
